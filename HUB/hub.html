@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAL10 | Fashion Intelligence</title>
+<meta name="description" content="LAL10 Fashion Intelligence — category-wise trend intelligence, market insights, price trends and brand intelligence.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#f7f4ee;
+  --paper:#fffdf9;
+  --ink:#171717;
+  --muted:#686b75;
+  --soft:#e8e2d8;
+  --brown:#9a6a3c;
+  --white:#fff;
+  --radius:10px;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+.site-header{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:20;
+  padding:24px 38px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  width:max-content;
+}
+
+.brand-name{
+  font-family:'Playfair Display',serif;
+  font-size:35px;
+  line-height:1;
+  font-weight:600;
+  letter-spacing:-1.8px;
+}
+
+.brand-divider{
+  width:1px;
+  height:32px;
+  background:#8d8d8d;
+}
+
+.brand-sub{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  font-size:12px;
+  line-height:1;
+  letter-spacing:4px;
+  font-weight:500;
+}
+
+/* =========================
+   HERO
+========================= */
+.hero{
+  position:relative;
+  min-height:280px;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-end;
+  padding:72px 5.2% 30px;
+  background:
+    linear-gradient(90deg,rgba(255,253,249,.98) 0%,rgba(255,253,249,.92) 35%,rgba(255,253,249,.22) 68%,rgba(255,253,249,.08) 100%),
+    url("https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=2200&q=88")
+    center 32%/cover no-repeat;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(0deg,rgba(255,253,249,.18),transparent 50%);
+  pointer-events:none;
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:760px;
+}
+
+.eyebrow{
+  color:#9b6836;
+  font-size:11px;
+  letter-spacing:5px;
+  text-transform:uppercase;
+  margin-bottom:17px;
+  font-weight:500;
+}
+
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(48px,5.2vw,76px);
+  line-height:.98;
+  letter-spacing:-3px;
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.hero-description{
+  max-width:700px;
+  color:#6c6f79;
+  font-size:18px;
+  line-height:1.45;
+  font-weight:400;
+}
+
+/* =========================
+   HERO SIDE PANEL
+========================= */
+.hero-panel{
+  position:absolute;
+  z-index:3;
+  right:3.2%;
+  bottom:9px;
+  width:345px;
+  min-height:200px;
+  padding:32px 42px;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:10px;
+  background:rgba(255,252,247,.84);
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+}
+
+.hero-panel-title{
+  font-size:12px;
+  line-height:1.9;
+  letter-spacing:4px;
+  font-weight:500;
+}
+
+.hero-panel-line{
+  width:50px;
+  height:2px;
+  background:#a2713d;
+  margin:15px 0 17px;
+}
+
+.hero-panel-text{
+  color:#676972;
+  font-size:16px;
+  line-height:1.45;
+}
+
+/* =========================
+   GRID
+========================= */
+.intelligence-grid{
+  width:100%;
+  padding:0 30px 34px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+
+/* =========================
+   CARD
+========================= */
+.intelligence-card{
+  position:relative;
+  height:210px;
+  overflow:hidden;
+  border-radius:9px;
+  text-decoration:none;
+  color:#fff;
+  isolation:isolate;
+  cursor:pointer;
+  background:#8c7966;
+  box-shadow:0 1px 2px rgba(0,0,0,.03);
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease;
+}
+
+.intelligence-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.04) 5%,
+      rgba(0,0,0,.05) 35%,
+      rgba(0,0,0,.62) 100%
+    );
+}
+
+.intelligence-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 30px rgba(35,25,15,.15);
+}
+
+.card-image{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  transform:scale(1.005);
+  transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .5s ease;
+}
+
+.intelligence-card:hover .card-image{
+  transform:scale(1.045);
+  filter:saturate(1.04);
+}
+
+.card-content{
+  position:absolute;
+  z-index:2;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:23px 23px 17px;
+}
+
+.card-title{
+  font-family:'Playfair Display',serif;
+  font-size:34px;
+  line-height:1;
+  letter-spacing:-1px;
+  font-weight:600;
+  margin-bottom:7px;
+  text-shadow:0 1px 4px rgba(0,0,0,.15);
+}
+
+.card-subtitle{
+  font-size:16px;
+  line-height:1.2;
+  font-weight:400;
+  color:rgba(255,255,255,.97);
+}
+
+.card-arrow{
+  position:absolute;
+  right:20px;
+  bottom:17px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:rgba(255,255,255,.96);
+  color:#252525;
+  display:grid;
+  place-items:center;
+  font-size:26px;
+  font-weight:300;
+  transition:
+    transform .3s ease,
+    background .3s ease;
+}
+
+.intelligence-card:hover .card-arrow{
+  transform:translateX(4px);
+  background:#fff;
+}
+
+.card-status{
+  position:absolute;
+  right:80px;
+  top:18px;
+  z-index:3;
+  display:none;
+  align-items:center;
+  gap:6px;
+  padding:5px 8px;
+  border-radius:30px;
+  background:rgba(255,255,255,.14);
+  backdrop-filter:blur(4px);
+  font-size:9px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.status-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#c99762;
+}
+
+.status-dot.online{background:#72a77b}
+.status-dot.offline{background:#c96c62}
+
+/* =========================
+   FOOTER
+========================= */
+.footer{
+  padding:18px 30px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#85858a;
+  font-size:11px;
+  border-top:1px solid rgba(35,35,35,.06);
+}
+
+.footer-brand{
+  letter-spacing:1px;
+}
+
+.footer-right{
+  letter-spacing:.4px;
+}
+
+/* =========================
+   LOADING
+========================= */
+.card.loading{
+  background:linear-gradient(110deg,#ddd7ce 8%,#f0ece5 18%,#ddd7ce 33%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer{
+  to{background-position:-200% 0}
+}
+
+.card.loading .card-image,
+.card.loading .card-content{visibility:hidden}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width:1100px){
+  .hero{
+    padding-left:38px;
+    padding-right:38px;
+  }
+
+  .hero-panel{
+    width:300px;
+    padding:26px 30px;
+  }
+
+  .intelligence-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:760px){
+  .site-header{
+    padding:20px 18px;
+  }
+
+  .brand-name{
+    font-size:29px;
+  }
+
+  .brand-divider{
+    height:27px;
+  }
+
+  .brand-sub{
+    font-size:9px;
+    letter-spacing:3px;
+  }
+
+  .hero{
+    min-height:520px;
+    padding:105px 20px 28px;
+    align-items:flex-end;
+    background:
+      linear-gradient(0deg,rgba(255,253,249,.98) 0%,rgba(255,253,249,.77) 42%,rgba(255,253,249,.14) 100%),
+      url("https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1400&q=85")
+      63% center/cover no-repeat;
+  }
+
+  .hero-content{
+    max-width:100%;
+  }
+
+  .hero-title{
+    font-size:48px;
+    letter-spacing:-2px;
+  }
+
+  .hero-description{
+    font-size:15px;
+    max-width:95%;
+  }
+
+  .hero-panel{
+    display:none;
+  }
+
+  .intelligence-grid{
+    grid-template-columns:1fr;
+    padding:0 14px 25px;
+    gap:12px;
+  }
+
+  .intelligence-card{
+    height:220px;
+  }
+
+  .card-title{
+    font-size:32px;
+  }
+
+  .footer{
+    padding:16px;
+    flex-direction:column;
+    gap:7px;
+    text-align:center;
+  }
+}
+
+@media(max-width:420px){
+  .brand{
+    gap:12px;
+  }
+
+  .brand-name{
+    font-size:26px;
+  }
+
+  .brand-sub{
+    letter-spacing:2px;
+  }
+
+  .hero-title{
+    font-size:43px;
+  }
+
+  .card-title{
+    font-size:29px;
+  }
+
+  .card-arrow{
+    width:44px;
+    height:44px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-name">LAL10</div>
+    <div class="brand-divider"></div>
+    <div class="brand-sub">
+      <span>FASHION</span>
+      <span>INTELLIGENCE</span>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="eyebrow">Data Trends Opportunities</div>
+    <h1 class="hero-title">Fashion Intelligence</h1>
+    <p class="hero-description">
+      Explore category-wise trend intelligence, market insights, top brands,
+      price trends and more.
+    </p>
+  </div>
+
+  <div class="hero-panel">
+    <div class="hero-panel-title">
+      TURN FASHION DATA<br>
+      INTO SMARTER DECISIONS.
+    </div>
+    <div class="hero-panel-line"></div>
+    <div class="hero-panel-text">
+      Real-time market insights for brands, buyers and fashion businesses.
+    </div>
+  </div>
+</section>
+
+<main id="intelligenceGrid" class="intelligence-grid">
+  <!-- Cards are rendered dynamically from CATEGORIES below -->
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">LAL10 · FASHION INTELLIGENCE</div>
+  <div class="footer-right">© <span id="year"></span> LAL10. All rights reserved.</div>
+</footer>
+
+<script>
+/*
+|--------------------------------------------------------------------------
+| CATEGORY CONFIG
+|--------------------------------------------------------------------------
+| Add / remove categories here.
+| Every card in the homepage is generated from this array.
+|
+| route      = destination URL
+| image      = card image
+| title      = visible card title
+| subtitle   = visible card subtitle
+| objectPos  = image crop position
+|--------------------------------------------------------------------------
+*/
+
+const CATEGORIES = [
+  {
+    slug: "activewear",
+    port: 3008,
+    title: "Activewear",
+    subtitle: "Trend Intelligence",
+    route: "/activewear/",
+    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 42%"
+  },
+  {
+    slug: "polo",
+    port: 3009,
+    title: "Polo",
+    subtitle: "Trend Intelligence",
+    route: "/polos/",
+    image: "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 40%"
+  },
+  {
+    slug: "ethnicwear",
+    port: 3015,
+    title: "Ethnicwear",
+    subtitle: "Trend Intelligence",
+    route: "/ethnic/",
+    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 40%"
+  },
+  {
+    slug: "westernwear",
+    port: 3012,
+    title: "Westernwear",
+    subtitle: "Trend Intelligence",
+    route: "/westernwear/",
+    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 35%"
+  },
+  {
+    slug: "shirts",
+    port: 3011,
+    title: "Shirts",
+    subtitle: "Trend Intelligence",
+    route: "/shirts/",
+    image: "https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 36%"
+  },
+  {
+    slug: "kidswear",
+    port: 3010,
+    title: "Kidswear",
+    subtitle: "Trend Intelligence",
+    route: "/kids/",
+    image: "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 42%"
+  },
+  {
+    slug: "occasionwear",
+    port: 3014,
+    title: "Occasionwear",
+    subtitle: "Trend Intelligence",
+    route: "/occasionwear/",
+    image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 43%"
+  },
+  {
+    slug: "innerwear",
+    port: 3013,
+    title: "Innerwear",
+    subtitle: "Trend Intelligence",
+    route: "/innerwear/",
+    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 38%"
+  },
+  {
+    slug: "special",
+    port: 3019,
+    title: "Special Arrow X USpolo",
+    subtitle: "Trend Intelligence",
+    route: "/special/",
+    image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 42%"
+  },
+  {
+    slug: "maneet",
+    port: 3020,
+    title: "Maneet",
+    subtitle: "Shirts Intelligence",
+    route: "/maneet/",
+    image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1200&q=88",
+    objectPos: "center 38%"
+  }
+];
+
+/*
+|--------------------------------------------------------------------------
+| RENDER CARDS
+|--------------------------------------------------------------------------
+*/
+
+const grid = document.getElementById("intelligenceGrid");
+
+function getSessionToken() {
+  const match = document.cookie.match(/(?:^|;\s*)session_token=([^;]+)/);
+  if (match) return match[1];
+  const urlParam = new URLSearchParams(window.location.search).get("auth_token");
+  if (urlParam) return urlParam;
+  try { return localStorage.getItem("session_token") || ""; } catch(e) { return ""; }
+}
+
+function resolveCardUrl(category) {
+  const isLocal = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && (window.location.port === "3000" || !window.location.port);
+  if (isLocal && category.port) {
+    const token = getSessionToken();
+    const tokenQuery = token ? `?auth_token=${encodeURIComponent(token)}` : "";
+    return `http://${window.location.hostname}:${category.port}/${tokenQuery}`;
+  }
+  return category.route || `/${category.slug}/`;
+}
+
+function renderCategories(categories) {
+  grid.innerHTML = "";
+
+  categories.forEach(category => {
+    const card = document.createElement("a");
+
+    card.className = "intelligence-card";
+    card.href = resolveCardUrl(category);
+    card.dataset.slug = category.slug;
+    card.setAttribute("aria-label", `Open ${category.title} intelligence`);
+
+    card.innerHTML = `
+      <img
+        class="card-image"
+        src="${category.image}"
+        alt="${category.title}"
+        loading="lazy"
+        style="object-position:${category.objectPos || "center"}"
+      >
+
+      <div class="card-status">
+        <span class="status-dot" id="dot-${category.slug}"></span>
+        <span id="status-${category.slug}">Live</span>
+      </div>
+
+      <div class="card-content">
+        <div>
+          <div class="card-title">${category.title}</div>
+          <div class="card-subtitle">${category.subtitle}</div>
+        </div>
+
+        <div class="card-arrow" aria-hidden="true">→</div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+renderCategories(CATEGORIES);
+
+/*
+|--------------------------------------------------------------------------
+| SERVICE STATUS RESOLVER (Live Health & Dots)
+|--------------------------------------------------------------------------
+*/
+
+const SLUG_ALIASES = {
+  "polo": "polos",
+  "polos": "polo",
+  "kidswear": "kids",
+  "kids": "kidswear",
+  "ethnicwear": "ethnic",
+  "ethnic": "ethnicwear",
+  "loungewear": "special",
+  "special": "loungewear"
+};
+
+async function loadServiceStatus() {
+  try {
+    const response = await fetch("/api/services", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    if (!response.ok) return;
+
+    const data = await response.json();
+    const services = data.services || [];
+
+    services.forEach(service => {
+      if (!service.slug) return;
+
+      const targetSlugs = [service.slug, SLUG_ALIASES[service.slug]].filter(Boolean);
+
+      targetSlugs.forEach(slug => {
+        const dot = document.getElementById(`dot-${slug}`);
+        const label = document.getElementById(`status-${slug}`);
+
+        if (dot && label) {
+          dot.classList.remove("online", "offline");
+
+          if (service.online) {
+            dot.classList.add("online");
+            label.textContent = "Live";
+          } else {
+            dot.classList.add("offline");
+            label.textContent = "Offline";
+          }
+        }
+
+        const card = document.querySelector(
+          `.intelligence-card[data-slug="${slug}"]`
+        );
+
+        if (card) {
+          const badge = card.querySelector(".card-status");
+          if (badge) badge.style.display = "flex";
+        }
+      });
+    });
+
+  } catch (error) {
+    // Endpoint is optional. Keep homepage clean if unreachable.
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| DYNAMIC CATEGORY API
+|--------------------------------------------------------------------------
+*/
+
+async function loadCategoriesFromAPI() {
+  try {
+    const response = await fetch("/api/intelligence/categories", {
+      credentials: "include",
+      cache: "no-store"
+    });
+
+    if (!response.ok) return;
+
+    const data = await response.json();
+
+    if (
+      Array.isArray(data.categories) &&
+      data.categories.length
+    ) {
+      renderCategories(data.categories);
+      loadServiceStatus();
+    }
+  } catch (error) {
+    // Local CATEGORIES remains the solid fallback.
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| INIT
+|--------------------------------------------------------------------------
+*/
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+loadCategoriesFromAPI();
+loadServiceStatus();
+
+/* Refresh service status every 30 seconds */
+setInterval(loadServiceStatus, 30000);
+</script>
+
+</body>
+</html>

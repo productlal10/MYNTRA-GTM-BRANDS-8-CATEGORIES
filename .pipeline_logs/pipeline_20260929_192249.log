@@ -1,0 +1,13 @@
+
+[0;36m╔══════════════════════════════════════════════════════╗[0m
+[0;36m║  LAL10 Fashion Intelligence — Daily Pipeline         ║[0m
+[0;36m║  Tue 29 Sep 2026, 07:22 PM                          ║[0m
+[0;36m╚══════════════════════════════════════════════════════╝[0m
+  [1;33mDRY RUN — EC2 sync skipped[0m
+
+[1m[0;36m[1/9] Activewear[0m  [2m(ACTIVEWEAR → activewear_myntra_data :3008)[0m
+  [0;36m→[0m Scraping...
+2026-09-29 19:22:50 | INFO    | BRAND     | Resolving brand routes. | run_id=run_20260929_192249_591118_b60f27 | brand=FUAARK
+2026-09-29 19:22:55 | INFO    | BRAND     | Resolved FUAARK -> 6 routes (best brand total=1277): https://www.myntra.com/fuaark, https://www.myntra.com/fuaark-gym-wear, https://www.myntra.com/fuaark-men, https://www.myntra.com/sports-wear?f=Brand%3AFUAARK, https://www.myntra.com/activewear?f=Brand%3AFUAARK, https://www.myntra.com/fuaark-activewear | run_id=run_20260929_192249_591118_b60f27 | brand=FUAARK | expected=1277
+2026-09-29 19:22:55 | INFO    | BRAND     | Starting brand scrape. | run_id=run_20260929_192249_591118_b60f27 | brand=FUAARK | expected=2212
+2026-09-29 19:22:55 | INFO    | LISTING   | Listing FUAARK route https://www.myntra.com/fuaark page 1 -> https://www.myntra.com/gateway/v4/search/fuaark?rows=50&o=0&plaEnabled=false&xdEnabled=false&isFacet=true&p=1 | run_id=run_20260929_192249_591118_b60f27 | brand=FUAARK | page=1 | route=https://www.myntra.com/fuaark | seen=0 | expected=1277

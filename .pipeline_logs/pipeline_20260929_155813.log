@@ -1,0 +1,22 @@
+
+[0;36m╔══════════════════════════════════════════════════════╗[0m
+[0;36m║  LAL10 Fashion Intelligence — Daily Pipeline         ║[0m
+[0;36m║  Tue 29 Sep 2026, 03:58 PM                          ║[0m
+[0;36m╚══════════════════════════════════════════════════════╝[0m
+  [1;33mDRY RUN — EC2 sync skipped[0m
+  [1;33mOnly running: Ocasionwear[0m
+
+[1m[0;36m╔══════════════════════════════════════════════════════╗[0m
+[1m[0;36m║               PIPELINE SUMMARY                       ║[0m
+[1m[0;36m╚══════════════════════════════════════════════════════╝[0m
+
+  CATEGORY             STATUS     UNITS      REVENUE          TIME    
+  ─────────────────────────────────────────────────────────────────
+
+  [1mTOTAL UNITS SOLD  : 0[0m
+  [1mTOTAL REVENUE     : ₹0[0m
+  [2mPipeline duration : 0m 0s[0m
+  [2mLog saved to      : /Users/turbom/Desktop/MYNTRA GTM BRANDS/.pipeline_logs/pipeline_20260929_155813.log[0m
+
+[0;32m  ✅  All categories scraped and synced successfully![0m
+

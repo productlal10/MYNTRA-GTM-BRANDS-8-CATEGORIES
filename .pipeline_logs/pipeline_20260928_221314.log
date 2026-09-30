@@ -1,0 +1,9 @@
+
+[0;36m╔══════════════════════════════════════════════════════╗[0m
+[0;36m║  LAL10 Fashion Intelligence — Daily Pipeline         ║[0m
+[0;36m║  Mon 28 Sep 2026, 10:13 PM                          ║[0m
+[0;36m╚══════════════════════════════════════════════════════╝[0m
+  [1;33mDRY RUN — EC2 sync skipped[0m
+
+[1m[0;36m[1/9] Activewear[0m  [2m(ACTIVEWEAR → activewear_myntra_data :3008)[0m
+  [0;36m→[0m Scraping...

@@ -1,0 +1,35 @@
+
+=======================================================
+🏮 LAL10 Fashion Intelligence Hub
+👉  http://localhost:3000/
+=======================================================
+
+📊 Service Registry:
+  🔴  Activewear       → http://localhost:3008  (activewear_myntra_data)
+  🔴  Polo             → http://localhost:3009  (polos_myntra_data)
+  🔴  Kids             → http://localhost:3010  (kids_gtm)
+  🔴  Shirts           → http://localhost:3011  (gtm_shirts_myntra)
+  🔴  Westernwear      → http://localhost:3012  (westernwear_gtm)
+  🔴  Innerwear        → http://localhost:3013  (hosiery_gtm)
+  🔴  Occasionwear     → http://localhost:3014  (ocassionwear_gtm)
+  🔴  Women Ethnic     → http://localhost:3015  (women_ethnic_myntra_data)
+  🔴  Special Arrow X USpolo → http://localhost:3019  (ghanshaym_special)
+  🔴  Maneet           → http://localhost:3020  (maneet_brands_shirts)
+
+ * Serving Flask app 'hub_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3000
+ * Running on http://192.168.1.11:3000
+Press CTRL+C to quit
+127.0.0.1 - - [30/Sep/2026 21:44:18] "GET /api/intelligence/categories HTTP/1.1" 200 -
+127.0.0.1 - - [30/Sep/2026 21:44:18] "GET /favicon.ico HTTP/1.1" 204 -
+127.0.0.1 - - [30/Sep/2026 21:44:18] "GET /api/services HTTP/1.1" 200 -
+127.0.0.1 - - [30/Sep/2026 21:44:18] "GET /api/services HTTP/1.1" 200 -
+127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /api/intelligence/categories HTTP/1.1" 200 -
+127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /api/services HTTP/1.1" 200 -
+127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /favicon.ico HTTP/1.1" 204 -
+127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /api/services HTTP/1.1" 200 -
+127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [30/Sep/2026 21:44:21] "GET /sw.js HTTP/1.1" 404 -

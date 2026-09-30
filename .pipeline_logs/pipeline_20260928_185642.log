@@ -1,0 +1,29 @@
+
+[0;36m╔══════════════════════════════════════════════════════╗[0m
+[0;36m║  LAL10 Fashion Intelligence — Daily Pipeline         ║[0m
+[0;36m║  Mon 28 Sep 2026, 06:56 PM                          ║[0m
+[0;36m╚══════════════════════════════════════════════════════╝[0m
+  [1;33mDRY RUN — EC2 sync skipped[0m
+  [1;33mOnly running: SPECIAL[0m
+
+[1m[0;36m[9/9] Ghan Special[0m  [2m(SPECIAL → ghanshaym_special :3019)[0m
+  [0;36m→[0m Scraping...
+    [0;32m✓[0m Scraped 17 products (0 failed)
+  [0;36m→[0m Exporting local DB (ghanshaym_special)...
+    [0;32m✓[0m Exported: 95 sizes | 51 snapshots | units_sold=0 | revenue=₹0.0
+
+[1m[0;36m╔══════════════════════════════════════════════════════╗[0m
+[1m[0;36m║               PIPELINE SUMMARY                       ║[0m
+[1m[0;36m╚══════════════════════════════════════════════════════╝[0m
+
+  CATEGORY             STATUS     UNITS      REVENUE          TIME    
+  ─────────────────────────────────────────────────────────────────
+  Ghan Special         [0;32mOK[0m         0       ₹0.0          6s
+
+  [1mTOTAL UNITS SOLD  : 0[0m
+  [1mTOTAL REVENUE     : ₹0[0m
+  [2mPipeline duration : 0m 6s[0m
+  [2mLog saved to      : /Users/turbom/Desktop/MYNTRA GTM BRANDS/.pipeline_logs/pipeline_20260928_185642.log[0m
+
+[0;32m  ✅  All categories scraped and synced successfully![0m
+
