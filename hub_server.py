@@ -52,9 +52,52 @@ def create_session_token(email: str) -> str:
     ACTIVE_SESSIONS.add(token)
     return token
 
+REVOKED_SESSIONS_FILE = BASE_DIR / ".revoked_sessions"
+
+# Tokens are stateless and shared by the hub and every category server, so logout
+# records the token in one file all of them check; entries drop out after 7 days.
+_REVOKED_CACHE = {"mtime": None, "tokens": frozenset()}
+
+
+def _revoked_tokens():
+    try:
+        mtime = REVOKED_SESSIONS_FILE.stat().st_mtime
+    except OSError:
+        return frozenset()
+    if mtime != _REVOKED_CACHE["mtime"]:
+        try:
+            tokens = frozenset(REVOKED_SESSIONS_FILE.read_text("utf-8").split())
+        except OSError:
+            tokens = frozenset()
+        _REVOKED_CACHE.update(mtime=mtime, tokens=tokens)
+    return _REVOKED_CACHE["tokens"]
+
+
+def revoke_token(token: str) -> None:
+    ACTIVE_SESSIONS.discard(token)
+    if not token:
+        return
+    cutoff = time.time() - 7 * 86400
+
+    def _live(t):
+        try:
+            return int(t.split(".")[1]) >= cutoff
+        except (IndexError, ValueError):
+            return False
+
+    kept = [t for t in _revoked_tokens() if _live(t)]
+    kept.append(token)
+    try:
+        REVOKED_SESSIONS_FILE.write_text("\n".join(kept) + "\n", "utf-8")
+    except OSError:
+        pass
+
+
 def is_valid_token(token: str) -> bool:
     """Validate token format, signature, and expiration."""
     if not token or not isinstance(token, str):
+        return False
+    if token in _revoked_tokens():
         return False
     if token in ACTIVE_SESSIONS:
         return True
@@ -220,9 +263,7 @@ if _FLASK:
 
     @app.route("/api/auth/logout", methods=["GET", "POST"])
     def auth_logout():
-        token = get_current_token()
-        if token in ACTIVE_SESSIONS:
-            ACTIVE_SESSIONS.discard(token)
+        revoke_token(get_current_token())
         resp = make_response(redirect("/login") if request.method == "GET" else jsonify({"message": "Logged out successfully"}))
         resp.delete_cookie("session_token", path="/")
         return resp
