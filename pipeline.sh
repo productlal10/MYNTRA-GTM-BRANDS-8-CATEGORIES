@@ -130,6 +130,14 @@ def export_table(cur, table, cols, path, conflict="ON CONFLICT DO NOTHING"):
 
 os.makedirs('$OUT_DIR', exist_ok=True)
 
+# Products must reach EC2 before the rows that reference them (product_sizes has a
+# foreign key), so they are upserted rather than wiped and reloaded.
+cur.execute("SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND table_name='products' ORDER BY ordinal_position")
+product_cols = [r[0] for r in cur.fetchall()]
+product_upsert = "ON CONFLICT (product_id) DO UPDATE SET " + ", ".join(
+    f"{c} = EXCLUDED.{c}" for c in product_cols if c != "product_id")
+n_products = export_table(cur, "products", product_cols, "$OUT_DIR/products.sql", conflict=product_upsert)
+
 n_sizes    = export_table(cur, "product_sizes",
     ["product_id","size","sku_id","available","inventory_count","raw_inventory_count","inventory_quality"],
     "$OUT_DIR/sizes.sql")
@@ -139,12 +147,17 @@ n_snaps    = export_table(cur, "daily_inventory_snapshots",
 n_analytics = export_table(cur, "daily_sales_analytics",
     ["analytics_date","product_id","brand","category","units_sold","revenue_generated","stock_added","price_delta","ros","stock_status"],
     "$OUT_DIR/analytics.sql")
-n_changes  = export_table(cur, "product_change_history",
-    ["product_id","recorded_at","event_num","categories_changed","stock_old","stock_new","stock_delta",
-     "color_name","size_changes","price_old","price_new","price_delta","mrp_old","mrp_new",
-     "discount_amt_old","discount_amt_new","discount_pct_old","discount_pct_new",
-     "rating_old","rating_new","reviews_old","reviews_new"],
-    "$OUT_DIR/changes.sql")
+# Only SPECIAL keeps a product_change_history table; elsewhere it does not exist.
+cur.execute("SELECT to_regclass('public.product_change_history') IS NOT NULL")
+if cur.fetchone()[0]:
+    n_changes = export_table(cur, "product_change_history",
+        ["product_id","recorded_at","event_num","categories_changed","stock_old","stock_new","stock_delta",
+         "color_name","size_changes","price_old","price_new","price_delta","mrp_old","mrp_new",
+         "discount_amt_old","discount_amt_new","discount_pct_old","discount_pct_new",
+         "rating_old","rating_new","reviews_old","reviews_new"],
+        "$OUT_DIR/changes.sql")
+else:
+    n_changes = -1
 
 # Get KPIs
 try:
@@ -220,11 +233,13 @@ for cat_def in "${CATEGORIES[@]}"; do
   REVENUE=$(echo "$KPI_LINE" | grep -oE 'revenue=[0-9.]+' | cut -d= -f2)
   SIZES=$(echo "$KPI_LINE" | grep -oE 'sizes=[0-9]+' | cut -d= -f2)
   SNAPS=$(echo "$KPI_LINE" | grep -oE 'snaps=[0-9]+' | cut -d= -f2)
+  CHANGES=$(echo "$KPI_LINE" | grep -oE 'changes=-?[0-9]+' | cut -d= -f2)
   set -e
   UNITS=${UNITS:-0}
   REVENUE=${REVENUE:-0.0}
   SIZES=${SIZES:-0}
   SNAPS=${SNAPS:-0}
+  CHANGES=${CHANGES:--1}
 
   ok "Exported: $SIZES sizes | $SNAPS snapshots | units_sold=$UNITS | revenue=₹$REVENUE"
   TOTAL_UNITS=$((TOTAL_UNITS + UNITS))
@@ -247,8 +262,8 @@ for cat_def in "${CATEGORIES[@]}"; do
 
     # Upload SQL files
     scp -o StrictHostKeyChecking=no -o ConnectTimeout=15 -q -i "$EC2_KEY" \
-      "$TMP_OUT/sizes.sql" "$TMP_OUT/snapshots.sql" \
-      "$TMP_OUT/analytics.sql" "$TMP_OUT/changes.sql" \
+      "$TMP_OUT/products.sql" "$TMP_OUT/sizes.sql" "$TMP_OUT/snapshots.sql" \
+      "$TMP_OUT/analytics.sql" $([[ $CHANGES -ge 0 ]] && echo "$TMP_OUT/changes.sql") \
       "$EC2:/tmp/" 2>>"$LOG_FILE" || { fail "Upload failed"; CAT_STATUS="SCP_FAIL"; continue; }
 
     # Apply on EC2 + restart service
@@ -256,21 +271,28 @@ for cat_def in "${CATEGORIES[@]}"; do
     EC2_PORT="$PORT"
     EC2_FOLDER_ESCAPED="$EC2_FOLDER"
 
+    # product_change_history only exists where the local DB has it (SPECIAL).
+    if [[ $CHANGES -ge 0 ]]; then
+      CHANGES_DELETE="DELETE FROM product_change_history; "
+      CHANGES_LOAD="-f /tmp/changes.sql"
+    else
+      CHANGES_DELETE=""
+      CHANGES_LOAD=""
+    fi
+
     ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -i "$EC2_KEY" "$EC2" \
-      "PGPASSWORD=$PG_PASS psql -h 127.0.0.1 -U $PG_USER -d $EC2_DB -q -c \
-        'DELETE FROM product_change_history; DELETE FROM daily_sales_analytics; DELETE FROM daily_inventory_snapshots; DELETE FROM product_sizes;' \
-       && PGPASSWORD=$PG_PASS psql -h 127.0.0.1 -U $PG_USER -d $EC2_DB -q -f /tmp/sizes.sql \
-       && PGPASSWORD=$PG_PASS psql -h 127.0.0.1 -U $PG_USER -d $EC2_DB -q -f /tmp/snapshots.sql \
-       && PGPASSWORD=$PG_PASS psql -h 127.0.0.1 -U $PG_USER -d $EC2_DB -q -f /tmp/analytics.sql \
-       && PGPASSWORD=$PG_PASS psql -h 127.0.0.1 -U $PG_USER -d $EC2_DB -q -f /tmp/changes.sql \
-       && pkill -f 'gunicorn.*$EC2_PORT' 2>/dev/null || true \
+      "PGPASSWORD=$PG_PASS psql -h 127.0.0.1 -U $PG_USER -d $EC2_DB -q \
+        -v ON_ERROR_STOP=1 --single-transaction \
+        -c '${CHANGES_DELETE}DELETE FROM daily_sales_analytics; DELETE FROM daily_inventory_snapshots; DELETE FROM product_sizes;' \
+        -f /tmp/products.sql -f /tmp/sizes.sql -f /tmp/snapshots.sql -f /tmp/analytics.sql $CHANGES_LOAD \
+       && { pkill -f 'gunicorn.*127.0.0.1:$EC2_PORT' 2>/dev/null || true; } \
        && sleep 1 \
-       && PORT=$EC2_PORT SKIP_PREWARM=1 /var/www/myntra_gtm/venv/bin/gunicorn \
+       && { PORT=$EC2_PORT SKIP_PREWARM=1 /var/www/myntra_gtm/venv/bin/gunicorn \
             --workers 1 --threads 4 --worker-class gthread \
             --bind 127.0.0.1:$EC2_PORT --timeout 180 \
             --worker-tmp-dir /dev/shm --log-level warning \
             --chdir '/var/www/myntra_gtm/$EC2_FOLDER_ESCAPED' \
-            server:app >> '/var/www/myntra_gtm/$EC2_FOLDER_ESCAPED/logs/server.log' 2>&1 & \
+            server:app >> '/var/www/myntra_gtm/$EC2_FOLDER_ESCAPED/logs/server.log' 2>&1 & } \
        && sleep 2 \
        && curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:$EC2_PORT/api/health" \
       2>>"$LOG_FILE" | grep -E '^2[0-9][0-9]$' > /dev/null && ok "EC2 synced, :$EC2_PORT ✅" || { fail "EC2 apply/restart failed"; CAT_STATUS="EC2_FAIL"; }

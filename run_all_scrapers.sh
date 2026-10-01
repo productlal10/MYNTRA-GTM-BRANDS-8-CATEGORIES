@@ -58,6 +58,22 @@ GREEN='\033[0;32m'; CYAN='\033[0;36m'; RED='\033[0;31m'
 YELLOW='\033[1;33m'; MAGENTA='\033[0;35m'; BOLD='\033[1m'; NC='\033[0m'
 TICK="${GREEN}✔${NC}"; CROSS="${RED}✗${NC}"; ARROW="${CYAN}➜${NC}"
 
+# ─── HELPERS ────────────────────────────────────────────────────────────────
+# Scrapers are launched as a bare "main.py" from inside their folder, so match on
+# each main.py process's working directory, not its command line.
+category_running() {
+  local folder="$1" spid
+  for spid in $(pgrep -f "main.py" 2>/dev/null); do
+    if [[ "$(lsof -a -p "$spid" -d cwd -Fn 2>/dev/null | sed -n 's/^n//p')" == "$BASE_DIR/$folder" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+# macOS ships bash 3.2, which has no ${var,,}.
+lower() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
+
 # ─── STOP ACTION ────────────────────────────────────────────────────────────
 if [[ "${1:-}" == "--stop" ]]; then
   echo -e "\n${BOLD}${YELLOW}Stopping all running scrapers…${NC}"
@@ -102,7 +118,7 @@ if [[ "${1:-}" == "--status" ]]; then
     log_file="$LOG_DIR/${folder// /_}_scraper.log"
     
     is_running=false
-    if pgrep -f "$folder/main.py" >/dev/null 2>&1; then
+    if category_running "$folder"; then
       is_running=true
     fi
 
@@ -153,7 +169,14 @@ RUN_COUNT=0
 for cat in "${CATEGORIES[@]}"; do
   IFS='|' read -r folder db port label <<< "$cat"
 
-  if [[ -n "$ONLY_CAT" ]] && [[ "${label,,}" != *"${ONLY_CAT,,}"* ]] && [[ "${folder,,}" != *"${ONLY_CAT,,}"* ]]; then
+  if [[ -n "$ONLY_CAT" ]] && [[ "$(lower "$label")" != *"$(lower "$ONLY_CAT")"* ]] && [[ "$(lower "$folder")" != *"$(lower "$ONLY_CAT")"* ]]; then
+    continue
+  fi
+
+  # Never start a second scraper on a database that is already being scraped
+  # (e.g. a manual run still going when the daily cron fires).
+  if category_running "$folder"; then
+    echo -e "  ${YELLOW}⏭  $label is already being scraped — skipping.${NC}"
     continue
   fi
 
@@ -193,4 +216,11 @@ if [[ "$MODE" == "parallel" ]]; then
   echo -e "  • View logs directory:   ${CYAN}$LOG_DIR${NC}"
   echo -e "  • Stop all scrapers:     ${CYAN}bash run_all_scrapers.sh --stop${NC}"
   echo -e "${BOLD}${GREEN}════════════════════════════════════════════════════════════════${NC}\n"
+
+  # Unattended runs (cron) wait for every scraper so the lock is held until the
+  # whole run finishes; otherwise the next run could overlap a slow category.
+  if [[ ! -t 1 ]]; then
+    wait
+    echo "[$(date)] All scrapers finished."
+  fi
 fi

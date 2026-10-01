@@ -39,11 +39,11 @@ log()  { echo -e "${CYAN}[HUB]${NC} $*"; }
 ok()   { echo -e "${GREEN}[OK]${NC}  $*"; }
 warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
 err()  { echo -e "${RED}[ERR]${NC} $*"; }
-head() { echo -e "\n${BOLD}${MAGENTA}$*${NC}"; }
+section() { echo -e "\n${BOLD}${MAGENTA}$*${NC}"; }
 
 # ─── STOP ALL ───
 stop_all() {
-  head "Stopping all LAL10 services…"
+  section "Stopping all LAL10 services…"
   if [ -f "$PIDS_FILE" ]; then
     while IFS= read -r pid; do
       if kill -0 "$pid" 2>/dev/null; then
@@ -54,11 +54,12 @@ stop_all() {
   fi
   # Also kill by pattern
   pkill -f "hub_server.py" 2>/dev/null || true
-  pkill -f "server.py" 2>/dev/null || true
+  pkill -f "python[0-9.]* server.py" 2>/dev/null || true
+  pkill -f "runpy.run_path(.server.py" 2>/dev/null || true
   for svc in "${SERVICES[@]}"; do
     IFS='|' read -r name folder port <<< "$svc"
     if [ -n "$port" ]; then
-      lsof -ti :"$port" | xargs kill -9 2>/dev/null || true
+      lsof -ti TCP:"$port" -sTCP:LISTEN | xargs kill -9 2>/dev/null || true
     fi
   done
   ok "All services stopped."
@@ -89,7 +90,7 @@ echo ""
 > "$PIDS_FILE"  # Reset PID file
 
 # ─── INIT POSTGRESQL DATABASES ───
-head "Initializing PostgreSQL databases…"
+section "Initializing PostgreSQL databases…"
 PSQL_CMD=""
 for cmd in psql /usr/local/bin/psql /opt/homebrew/bin/psql; do
   if command -v "$cmd" &>/dev/null; then
@@ -107,7 +108,7 @@ fi
 echo ""
 
 # ─── START HUB ───
-head "Starting Hub Server (port $HUB_PORT)…"
+section "Starting Hub Server (port $HUB_PORT)…"
 if ! is_port_free "$HUB_PORT"; then
   EXISTING_PID=$(port_in_use_pid "$HUB_PORT")
   warn "Port $HUB_PORT already in use (PID: $EXISTING_PID) — skipping Hub"
@@ -126,7 +127,7 @@ else
 fi
 
 # ─── START CATEGORY SERVICES ───
-head "Starting 9 category intelligence services…"
+section "Starting 9 category intelligence services…"
 echo ""
 
 for svc in "${SERVICES[@]}"; do
@@ -150,8 +151,11 @@ for svc in "${SERVICES[@]}"; do
   LOG="$SVC_DIR/logs/server.log"
   mkdir -p "$SVC_DIR/logs"
 
+  # server.py is a symlink to ../Maneet/server.py. `python server.py` would put
+  # Maneet/ on sys.path (symlinks are resolved) and load Maneet's config/.env for
+  # every category; `-c` keeps this folder first so its own config/database load.
   cd "$SVC_DIR" && \
-    PORT="$port" "$PYTHON" server.py > "$LOG" 2>&1 &
+    PORT="$port" "$PYTHON" -c "import runpy; runpy.run_path('server.py', run_name='__main__')" > "$LOG" 2>&1 &
   SVC_PID=$!
   echo "$SVC_PID" >> "$PIDS_FILE"
 
@@ -165,7 +169,7 @@ for svc in "${SERVICES[@]}"; do
 done
 
 echo ""
-head "Service Summary"
+section "Service Summary"
 echo ""
 printf "  ${BOLD}%-22s %-8s %-12s${NC}\n" "Category" "Port" "Status"
 printf "  %s\n" "───────────────────────────────────────────"

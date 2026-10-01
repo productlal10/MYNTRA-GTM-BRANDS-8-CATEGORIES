@@ -92,17 +92,19 @@ def get_current_token() -> str:
     return ""
 
 # ─── Service Registry ───────────────────────────────────────────────────────
+# "gender" lists every audience making up at least 5% of that database (boys, girls
+# and unisex kids are grouped as "kids"), as measured on 2026-10-01.
 SERVICES = [
-    {"name": "Activewear",     "port": 3008, "folder": "ACTIVEWEAR",  "db": "activewear_myntra_data",  "slug": "activewear",  "gender": ["women", "unisex"]},
-    {"name": "Polo",           "port": 3009, "folder": "POLOS",        "db": "polos_myntra_data",        "slug": "polos",       "gender": ["men", "unisex"]},
+    {"name": "Activewear",     "port": 3008, "folder": "ACTIVEWEAR",  "db": "activewear_myntra_data",  "slug": "activewear",  "gender": ["men", "women", "kids"]},
+    {"name": "Polo",           "port": 3009, "folder": "POLOS",        "db": "polos_myntra_data",        "slug": "polos",       "gender": ["men", "women"]},
     {"name": "Kids",           "port": 3010, "folder": "Kids",         "db": "kids_gtm",                 "slug": "kids",        "gender": ["kids"]},
-    {"name": "Shirts",         "port": 3011, "folder": "Shirts",       "db": "gtm_shirts_myntra",        "slug": "shirts",      "gender": ["men"]},
-    {"name": "Westernwear",    "port": 3012, "folder": "Westerwear",   "db": "westernwear_gtm",          "slug": "westernwear", "gender": ["women"]},
-    {"name": "Innerwear",      "port": 3013, "folder": "Hosiery",      "db": "hosiery_gtm",              "slug": "innerwear",   "gender": ["women", "men", "unisex"]},
-    {"name": "Occasionwear",   "port": 3014, "folder": "Ocassionwear", "db": "ocassionwear_gtm",         "slug": "occasionwear","gender": ["women", "men"]},
+    {"name": "Shirts",         "port": 3011, "folder": "Shirts",       "db": "gtm_shirts_myntra",        "slug": "shirts",      "gender": ["men", "kids"]},
+    {"name": "Westernwear",    "port": 3012, "folder": "Westerwear",   "db": "westernwear_gtm",          "slug": "westernwear", "gender": ["women", "men", "kids"]},
+    {"name": "Innerwear",      "port": 3013, "folder": "Hosiery",      "db": "hosiery_gtm",              "slug": "innerwear",   "gender": ["women", "kids"]},
+    {"name": "Occasionwear",   "port": 3014, "folder": "Ocassionwear", "db": "ocassionwear_gtm",         "slug": "occasionwear","gender": ["men", "women", "kids"]},
     {"name": "Women Ethnic",   "port": 3015, "folder": "WOMEN ETHNIC", "db": "women_ethnic_myntra_data", "slug": "ethnic",      "gender": ["women"]},
     {"name": "Special Arrow X USpolo", "port": 3019, "folder": "SPECIAL",      "db": "ghanshaym_special",        "slug": "special",     "gender": ["men"]},
-    {"name": "Maneet",         "port": 3020, "folder": "Maneet",       "db": "maneet_brands_shirts",     "slug": "maneet",      "gender": ["men", "unisex"]},
+    {"name": "Maneet",         "port": 3020, "folder": "Maneet",       "db": "maneet_brands_shirts",     "slug": "maneet",      "gender": ["men", "women"]},
 ]
 
 HUB_PORT = int(os.environ.get("HUB_PORT", 3000))
