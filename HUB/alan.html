@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAL10 | Scraper & Cron Console (/alan)</title>
+<meta name="description" content="Minimal monochrome scraper and cron operations console for LAL10.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#ffffff;
+  --bg-subtle:#fafafa;
+  --card-bg:#ffffff;
+  --ink:#000000;
+  --ink-secondary:#6b6b6b;
+  --ink-light:#9e9e9e;
+  --border:#e2e2e2;
+  --border-dark:#000000;
+  --radius:16px;
+  --radius-sm:10px;
+  --radius-pill:9999px;
+  --font-sans:'Outfit',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+
+body{
+  font-family:var(--font-sans);
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--ink-secondary)}
+
+/* Header Navigation */
+.navbar{
+  position:sticky;
+  top:0;
+  z-index:40;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:20px 40px;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+
+.brand-block{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:var(--ink);
+}
+
+.brand-title{
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:-0.5px;
+}
+
+.brand-badge{
+  font-family:var(--font-mono);
+  font-size:11px;
+  font-weight:600;
+  padding:4px 10px;
+  border-radius:var(--radius-pill);
+  background:#000000;
+  color:#ffffff;
+  letter-spacing:0.5px;
+}
+
+.nav-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.btn{
+  font-family:var(--font-sans);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:9px 16px;
+  font-size:13px;
+  font-weight:500;
+  border-radius:var(--radius-pill);
+  background:transparent;
+  color:var(--ink);
+  border:1px solid var(--border);
+  text-decoration:none;
+  cursor:pointer;
+  transition:all 0.15s ease;
+}
+
+.btn:hover{
+  border-color:var(--ink);
+  background:var(--bg-subtle);
+}
+
+.btn.primary{
+  background:#000000;
+  border-color:#000000;
+  color:#ffffff;
+}
+
+.btn.primary:hover{
+  background:#222222;
+  border-color:#222222;
+}
+
+.btn.secondary{
+  background:var(--bg);
+  border-color:var(--border);
+  color:var(--ink);
+}
+
+.btn.secondary:hover{
+  background:#000000;
+  color:#ffffff;
+  border-color:#000000;
+}
+
+.btn.sm{
+  padding:6px 12px;
+  font-size:12px;
+}
+
+/* Container */
+.container{
+  max-width:1400px;
+  margin:0 auto;
+  padding:36px 40px 80px;
+}
+
+/* Hero / Header Section */
+.page-header{
+  margin-bottom:32px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.page-title{
+  font-size:32px;
+  font-weight:700;
+  letter-spacing:-1px;
+}
+
+.page-subtitle{
+  font-size:15px;
+  color:var(--ink-secondary);
+}
+
+/* KPI Summary Cards Grid */
+.metrics-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;
+  margin-bottom:36px;
+}
+
+.metric-card{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:border-color 0.2s ease;
+}
+
+.metric-card:hover{
+  border-color:var(--ink);
+}
+
+.metric-label{
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:var(--ink-secondary);
+  margin-bottom:12px;
+}
+
+.metric-value{
+  font-size:32px;
+  font-weight:700;
+  letter-spacing:-1px;
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+}
+
+.metric-sub{
+  font-size:13px;
+  color:var(--ink-secondary);
+  margin-top:6px;
+}
+
+/* Master Actions Control Bar */
+.control-bar{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px 24px;
+  margin-bottom:32px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.control-bar-left{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.control-bar-title{
+  font-size:18px;
+  font-weight:600;
+  letter-spacing:-0.4px;
+}
+
+.control-bar-sub{
+  font-size:13px;
+  color:var(--ink-secondary);
+}
+
+.control-bar-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* Category Cards Grid */
+.categories-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(380px,1fr));
+  gap:20px;
+  margin-bottom:40px;
+}
+
+.category-card{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:all 0.2s ease;
+}
+
+.category-card:hover{
+  border-color:var(--ink);
+  box-shadow:0 12px 32px rgba(0,0,0,0.04);
+}
+
+.category-card.active-running{
+  border-color:var(--ink);
+  background:var(--bg-subtle);
+}
+
+.cat-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+
+.cat-name-block{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.cat-name{
+  font-size:18px;
+  font-weight:600;
+  letter-spacing:-0.3px;
+}
+
+.cat-meta{
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--ink-secondary);
+}
+
+/* Status Pill (Monochrome / Inverted on active) */
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:var(--radius-pill);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+  font-family:var(--font-mono);
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--ink-secondary);
+}
+
+.status-pill.running{
+  background:#000000;
+  color:#ffffff;
+  border-color:#000000;
+}
+
+.status-pill.running .dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#ffffff;
+  animation:invertPulse 1.2s infinite;
+}
+
+@keyframes invertPulse{
+  0%,100%{opacity:1}
+  50%{opacity:0.3}
+}
+
+.cat-details{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  background:var(--bg-subtle);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;
+  margin-bottom:16px;
+}
+
+.detail-item{
+  display:flex;
+  flex-direction:column;
+}
+
+.detail-label{
+  font-size:11px;
+  font-weight:500;
+  color:var(--ink-secondary);
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+
+.detail-value{
+  font-size:16px;
+  font-weight:600;
+  color:var(--ink);
+  font-family:var(--font-mono);
+  margin-top:2px;
+}
+
+.cat-log-snippet{
+  font-family:var(--font-mono);
+  font-size:11px;
+  background:var(--bg-subtle);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:10px 14px;
+  color:var(--ink-secondary);
+  margin-bottom:18px;
+  height:44px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  display:flex;
+  align-items:center;
+}
+
+.cat-log-snippet.empty{
+  color:var(--ink-light);
+  font-style:italic;
+}
+
+.cat-bottom-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* Modal / Slide-over Logs Drawer */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(6px);
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.modal-backdrop.open{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:960px;
+  height:82vh;
+  background:#ffffff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 24px 64px rgba(0,0,0,0.12);
+  overflow:hidden;
+}
+
+.modal-header{
+  padding:18px 24px;
+  background:#ffffff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.modal-title{
+  font-size:16px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.modal-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.modal-body{
+  flex:1;
+  padding:20px 24px;
+  overflow-y:auto;
+  font-family:var(--font-mono);
+  font-size:12px;
+  line-height:1.7;
+  background:var(--bg-subtle);
+  color:var(--ink);
+  white-space:pre-wrap;
+  word-break:break-all;
+}
+
+.log-entry{
+  padding:2px 0;
+  border-bottom:1px solid rgba(0,0,0,0.03);
+}
+
+.log-entry.error{
+  font-weight:600;
+  color:#000000;
+  background:rgba(0,0,0,0.05);
+  padding:2px 6px;
+  border-radius:4px;
+}
+
+.log-entry.warn{
+  color:var(--ink-secondary);
+}
+
+/* Toast */
+.toast-box{
+  position:fixed;
+  bottom:28px;
+  right:28px;
+  z-index:120;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.toast-msg{
+  background:#000000;
+  color:#ffffff;
+  padding:12px 20px;
+  border-radius:var(--radius-pill);
+  font-size:13px;
+  font-weight:500;
+  box-shadow:0 12px 24px rgba(0,0,0,0.15);
+  animation:fadeSlide 0.2s ease;
+}
+
+@keyframes fadeSlide{
+  from{transform:translateY(12px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+</style>
+</head>
+<body>
+
+<!-- Minimal Navigation -->
+<nav class="navbar">
+  <a href="/" class="brand-block">
+    <span class="brand-title">LAL10</span>
+    <span class="brand-badge">CONSOLE /alan</span>
+  </a>
+
+  <div class="nav-actions">
+    <a href="/" class="btn secondary sm">
+      Hub Home
+    </a>
+    <button class="btn secondary sm" onclick="fetchStatus(true)" id="refreshBtn">
+      Refresh
+    </button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1 class="page-title">Scraper & Cron Console</h1>
+    <p class="page-subtitle">Manual controls, real-time crawler process tracking, and execution logs across all 10 categories.</p>
+  </header>
+
+  <!-- Summary KPI Cards -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-label">Active Scraper Jobs</div>
+      <div class="metric-value" id="activeJobsVal">0 <span style="font-size:15px;font-weight:400;color:var(--ink-secondary)">/ 10</span></div>
+      <div class="metric-sub" id="activeJobsSub">All categories idle</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Total Tracked Products</div>
+      <div class="metric-value" id="totalProductsVal">—</div>
+      <div class="metric-sub">Across 10 category databases</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Daily Cron Trigger</div>
+      <div class="metric-value" style="font-size:22px;font-family:var(--font-mono);">0 2 * * *</div>
+      <div class="metric-sub">Every night at 02:00 AM IST</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Production Pipeline</div>
+      <div class="metric-value" style="font-size:20px;">EC2 Auto-Sync</div>
+      <div class="metric-sub">Target: /var/www/myntra_gtm</div>
+    </div>
+  </div>
+
+  <!-- Master Controls Bar -->
+  <div class="control-bar">
+    <div class="control-bar-left">
+      <div class="control-bar-title">Batch Execution Controls</div>
+      <div class="control-bar-sub">Launch or terminate all category scrapers simultaneously</div>
+    </div>
+
+    <div class="control-bar-right">
+      <button class="btn primary" onclick="triggerScrape('all', 'parallel')">
+        Start All (Parallel)
+      </button>
+
+      <button class="btn secondary" onclick="triggerScrape('all', 'sequential')">
+        Start All (Sequential)
+      </button>
+
+      <button class="btn secondary" onclick="stopScrape('all')">
+        Stop All
+      </button>
+    </div>
+  </div>
+
+  <!-- Category Scrapers Grid -->
+  <div class="categories-grid" id="categoriesGrid">
+    <div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--ink-secondary);">
+      Loading category scraper statuses…
+    </div>
+  </div>
+
+</div>
+
+<!-- Minimalist Log Modal -->
+<div class="modal-backdrop" id="logModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Category Log Stream</div>
+      <div class="modal-actions">
+        <button class="btn secondary sm" onclick="toggleAutoScroll()" id="autoScrollBtn">
+          Auto-scroll: ON
+        </button>
+        <button class="btn secondary sm" onclick="copyLogs()">
+          Copy
+        </button>
+        <button class="btn primary sm" onclick="closeLogModal()">
+          Close
+        </button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalLogBody">Connecting to log stream…</div>
+  </div>
+</div>
+
+<div class="toast-box" id="toastBox"></div>
+
+<script>
+const CATEGORIES = [
+  { folder: "Maneet", name: "Maneet Brands Shirts", port: 3020, db: "maneet_brands_shirts", subtitle: "14 Brands (₹700–₹3k)" },
+  { folder: "SPECIAL", name: "Special Arrow X USpolo", port: 3019, db: "ghanshaym_special", subtitle: "Strict 17 SKUs" },
+  { folder: "Shirts", name: "Shirts Intelligence", port: 3011, db: "gtm_shirts_myntra", subtitle: "17 Curated Brands" },
+  { folder: "POLOS", name: "Polo Intelligence", port: 3009, db: "polos_myntra_data", subtitle: "8 Polo Brands" },
+  { folder: "ACTIVEWEAR", name: "Activewear Intelligence", port: 3008, db: "activewear_myntra_data", subtitle: "6 Sport & Gym Brands" },
+  { folder: "Kids", name: "Kidswear Intelligence", port: 3010, db: "kids_gtm", subtitle: "6 Kids Apparel Brands" },
+  { folder: "Westerwear", name: "Westernwear Intelligence", port: 3012, db: "westernwear_gtm", subtitle: "6 Western Brands" },
+  { folder: "Hosiery", name: "Innerwear / Hosiery", port: 3013, db: "hosiery_gtm", subtitle: "Missy & Lyra Brands" },
+  { folder: "Ocassionwear", name: "Occasionwear Intelligence", port: 3014, db: "ocassionwear_gtm", subtitle: "5 Festive & Wedding Brands" },
+  { folder: "WOMEN ETHNIC", name: "Women Ethnic Wear", port: 3015, db: "women_ethnic_myntra_data", subtitle: "9 Ethnic Brands" }
+];
+
+let activeFolder = null;
+let pollTimer = null;
+let autoScroll = true;
+
+function showToast(msg) {
+  const box = document.getElementById("toastBox");
+  const toast = document.createElement("div");
+  toast.className = "toast-msg";
+  toast.innerText = msg;
+  box.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 250);
+  }, 3500);
+}
+
+function getSessionToken() {
+  const match = document.cookie.match(/(?:^|;\s*)session_token=([^;]+)/);
+  if (match) return match[1];
+  const urlParam = new URLSearchParams(window.location.search).get("auth_token");
+  if (urlParam) return urlParam;
+  try { return localStorage.getItem("session_token") || ""; } catch(e) { return ""; }
+}
+
+async function fetchStatus(isManual = false) {
+  try {
+    const token = getSessionToken();
+    const res = await fetch(`/api/alan/status?auth_token=${encodeURIComponent(token)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    renderCategories(data.services || []);
+    updateMetrics(data);
+    if (isManual) showToast("Status updated");
+  } catch (err) {
+    console.warn("Status fetch issue", err);
+    renderFallback();
+  }
+}
+
+function updateMetrics(data) {
+  const runningCount = (data.services || []).filter(s => s.is_running).length;
+  document.getElementById("activeJobsVal").innerHTML = `${runningCount} <span style="font-size:15px;font-weight:400;color:var(--ink-secondary)">/ 10</span>`;
+  document.getElementById("activeJobsSub").innerText = runningCount > 0 ? `${runningCount} scraper(s) actively running` : "All categories idle";
+
+  if (data.total_products !== undefined) {
+    document.getElementById("totalProductsVal").innerText = Number(data.total_products).toLocaleString();
+  }
+}
+
+function renderCategories(services) {
+  const grid = document.getElementById("categoriesGrid");
+  grid.innerHTML = "";
+
+  const svcMap = {};
+  services.forEach(s => svcMap[s.folder] = s);
+
+  CATEGORIES.forEach(cat => {
+    const live = svcMap[cat.folder] || {};
+    const isRunning = Boolean(live.is_running);
+    const prodCount = live.product_count !== undefined ? Number(live.product_count).toLocaleString() : "—";
+    const lastLog = live.latest_log || "No recent activity recorded";
+
+    const card = document.createElement("div");
+    card.className = `category-card ${isRunning ? 'active-running' : ''}`;
+
+    card.innerHTML = `
+      <div>
+        <div class="cat-top">
+          <div class="cat-name-block">
+            <span class="cat-name">${cat.name}</span>
+            <span class="cat-meta">${cat.folder} • :${cat.port} • ${cat.db}</span>
+          </div>
+          <span class="status-pill ${isRunning ? 'running' : 'idle'}">
+            ${isRunning ? '<span class="dot"></span> RUNNING' : 'IDLE'}
+          </span>
+        </div>
+
+        <div class="cat-details">
+          <div class="detail-item">
+            <span class="detail-label">Products</span>
+            <span class="detail-value">${prodCount}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Scope</span>
+            <span class="detail-value" style="font-size:12px;font-family:var(--font-sans);">${cat.subtitle}</span>
+          </div>
+        </div>
+
+        <div class="cat-log-snippet ${!live.latest_log ? 'empty' : ''}" title="${escapeHtml(lastLog)}">
+          ${escapeHtml(lastLog)}
+        </div>
+      </div>
+
+      <div class="cat-bottom-actions">
+        ${isRunning ? `
+          <button class="btn secondary sm" style="flex:1;" onclick="stopScrape('${cat.folder}')">
+            Stop
+          </button>
+        ` : `
+          <button class="btn primary sm" style="flex:1;" onclick="triggerScrape('${cat.folder}')">
+            Start Scraper
+          </button>
+        `}
+        <button class="btn secondary sm" onclick="openLogs('${cat.folder}')">
+          Logs
+        </button>
+        <a class="btn secondary sm" href="http://${window.location.hostname}:${cat.port}/" target="_blank">
+          UI
+        </a>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+function renderFallback() {
+  renderCategories(CATEGORIES.map(c => ({
+    folder: c.folder,
+    is_running: false,
+    product_count: "—",
+    latest_log: "Click Start to initiate scrape"
+  })));
+}
+
+async function triggerScrape(folder, mode = "parallel") {
+  showToast(`Initiating ${folder}…`);
+  try {
+    const token = getSessionToken();
+    const res = await fetch("/api/alan/scrape/start", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+      },
+      body: JSON.stringify({ folder, mode })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(`Scraper started for ${folder}`);
+      fetchStatus();
+    } else {
+      showToast(`Error: ${data.error || 'Failed to start'}`);
+    }
+  } catch (e) {
+    showToast(`Network error: ${e.message}`);
+  }
+}
+
+async function stopScrape(folder) {
+  showToast(`Stopping ${folder}…`);
+  try {
+    const token = getSessionToken();
+    const res = await fetch("/api/alan/scrape/stop", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+      },
+      body: JSON.stringify({ folder })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(`Stopped ${folder}`);
+      fetchStatus();
+    } else {
+      showToast(`Error: ${data.error || 'Failed to stop'}`);
+    }
+  } catch (e) {
+    showToast(`Network error: ${e.message}`);
+  }
+}
+
+async function openLogs(folder) {
+  activeFolder = folder;
+  document.getElementById("modalTitle").innerText = `${folder} Scraper Logs`;
+  document.getElementById("logModal").classList.add("open");
+  document.getElementById("modalLogBody").innerText = "Loading log stream…";
+
+  await fetchLogs();
+  clearInterval(pollTimer);
+  pollTimer = setInterval(fetchLogs, 1500);
+}
+
+function closeLogModal() {
+  document.getElementById("logModal").classList.remove("open");
+  activeFolder = null;
+  clearInterval(pollTimer);
+}
+
+async function fetchLogs() {
+  if (!activeFolder) return;
+  try {
+    const token = getSessionToken();
+    const res = await fetch(`/api/alan/logs/${encodeURIComponent(activeFolder)}?lines=120&auth_token=${encodeURIComponent(token)}`);
+    const data = await res.json();
+    const body = document.getElementById("modalLogBody");
+    if (data.lines && data.lines.length) {
+      body.innerHTML = data.lines.map(formatLog).join("\n");
+      if (autoScroll) {
+        body.scrollTop = body.scrollHeight;
+      }
+    } else {
+      body.innerText = `[INFO] No log entries for ${activeFolder} yet.`;
+    }
+  } catch (e) {
+    console.error("Log error", e);
+  }
+}
+
+function formatLog(line) {
+  const clean = escapeHtml(line);
+  if (line.includes("ERROR") || line.includes("✗") || line.includes("Failed")) {
+    return `<div class="log-entry error">${clean}</div>`;
+  }
+  if (line.includes("WARNING") || line.includes("⚠")) {
+    return `<div class="log-entry warn">${clean}</div>`;
+  }
+  return `<div class="log-entry">${clean}</div>`;
+}
+
+function toggleAutoScroll() {
+  autoScroll = !autoScroll;
+  document.getElementById("autoScrollBtn").innerText = `Auto-scroll: ${autoScroll ? 'ON' : 'OFF'}`;
+}
+
+function copyLogs() {
+  const text = document.getElementById("modalLogBody").innerText;
+  navigator.clipboard.writeText(text);
+  showToast("Logs copied to clipboard");
+}
+
+function escapeHtml(str) {
+  return (str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+fetchStatus();
+setInterval(fetchStatus, 4000);
+</script>
+</body>
+</html>

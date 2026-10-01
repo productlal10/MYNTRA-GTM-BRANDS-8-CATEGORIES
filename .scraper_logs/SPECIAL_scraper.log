@@ -247,3 +247,252 @@
   ],
   "failed_products": []
 }
+2026-10-01 15:00:47 | INFO    | PDP       | [1/17] Fetching product 42195469... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195469
+2026-10-01 15:01:07 | INFO    | PDP       | [✓] Scraped product 42195469: Arrow Sport - Arrow Sport Men Slim Fit Striped Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:07 | INFO    | PDP       | [2/17] Fetching product 42195470... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195470
+2026-10-01 15:01:08 | INFO    | PDP       | [✓] Scraped product 42195470: Arrow Sport - Arrow Sport Men Slim Fit Striped Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:08 | INFO    | PDP       | [3/17] Fetching product 42195471... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195471
+2026-10-01 15:01:08 | INFO    | PDP       | [✓] Scraped product 42195471: Arrow Sport - Arrow Sport Men Slim Fit Checked Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:09 | INFO    | PDP       | [4/17] Fetching product 42195472... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195472
+2026-10-01 15:01:09 | INFO    | PDP       | [✓] Scraped product 42195472: Arrow Sport - Arrow Sport Men Slim Fit Striped Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:10 | INFO    | PDP       | [5/17] Fetching product 42195473... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195473
+2026-10-01 15:01:10 | INFO    | PDP       | [✓] Scraped product 42195473: Arrow Sport - Arrow Sport Men Slim Fit Striped Casual Cotton Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:11 | INFO    | PDP       | [6/17] Fetching product 42195474... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195474
+2026-10-01 15:01:11 | INFO    | PDP       | [✓] Scraped product 42195474: Arrow Sport - Arrow Sport Men Slim Fit Gingham Checks Checked Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:12 | INFO    | PDP       | [7/17] Fetching product 42195475... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195475
+2026-10-01 15:01:12 | INFO    | PDP       | [✓] Scraped product 42195475: Arrow Sport - Arrow Sport Men Slim Fit Striped Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:13 | INFO    | PDP       | [8/17] Fetching product 42195476... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195476
+2026-10-01 15:01:13 | INFO    | PDP       | [✓] Scraped product 42195476: Arrow Sport - Arrow Sport Men Slim Fit Striped Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:13 | INFO    | PDP       | [9/17] Fetching product 42195477... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195477
+2026-10-01 15:01:14 | INFO    | PDP       | [✓] Scraped product 42195477: Arrow Sport - Arrow Sport Men Slim Fit Striped Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:14 | INFO    | PDP       | [10/17] Fetching product 42195484... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42195484
+2026-10-01 15:01:14 | INFO    | PDP       | [✓] Scraped product 42195484: Arrow Sport - Arrow Sport Men Slim Fit Checked Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:15 | INFO    | PDP       | [11/17] Fetching product 42423680... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42423680
+2026-10-01 15:01:15 | INFO    | PDP       | [✓] Scraped product 42423680: U.S. Polo Assn. - U.S. Polo Assn. Men Tailored Fit Tartan Checks Checked Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:16 | INFO    | PDP       | [12/17] Fetching product 42423681... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42423681
+2026-10-01 15:01:16 | INFO    | PDP       | [✓] Scraped product 42423681: U.S. Polo Assn. - U.S. Polo Assn. Men Tailored Fit Tartan Checks Checked Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:16 | INFO    | PDP       | [13/17] Fetching product 42423682... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42423682
+2026-10-01 15:01:17 | INFO    | PDP       | [✓] Scraped product 42423682: U.S. Polo Assn. - U.S. Polo Assn. Men Tailored Fit Checked Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:17 | INFO    | PDP       | [14/17] Fetching product 42423683... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42423683
+2026-10-01 15:01:18 | INFO    | PDP       | [✓] Scraped product 42423683: U.S. Polo Assn. - U.S. Polo Assn. Men Tailored Fit Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:18 | INFO    | PDP       | [15/17] Fetching product 42423684... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42423684
+2026-10-01 15:01:19 | INFO    | PDP       | [✓] Scraped product 42423684: U.S. Polo Assn. - U.S. Polo Assn. Men Tailored Fit Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:19 | INFO    | PDP       | [16/17] Fetching product 42423685... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42423685
+2026-10-01 15:01:20 | INFO    | PDP       | [✓] Scraped product 42423685: U.S. Polo Assn. - U.S. Polo Assn. Men Tailored Fit Printed Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+2026-10-01 15:01:20 | INFO    | PDP       | [17/17] Fetching product 42826877... | run_id=run_20261001_150047_266878_7349d6 | route=https://www.myntra.com/42826877
+2026-10-01 15:01:21 | INFO    | PDP       | [✓] Scraped product 42826877: U.S. Polo Assn. - U.S. Polo Assn. Men Tailored Fit Tartan Checks Checked Casual Shirt | run_id=run_20261001_150047_266878_7349d6
+{
+  "run_id": "run_20261001_150047_266878_7349d6",
+  "run_status": "COMPLETED",
+  "total_requested": 17,
+  "successful_count": 17,
+  "failed_count": 0,
+  "duration_seconds": 34.32,
+  "saved_products": [
+    {
+      "product_id": 42195469,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Striped Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42195470,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Striped Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42195471,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Checked Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42195472,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Striped Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42195473,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Striped Casual Cotton Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42195474,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Gingham Checks Checked Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42195475,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Striped Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42195476,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Striped Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42195477,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Striped Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42195484,
+      "brand": "Arrow Sport",
+      "title": "Arrow Sport Men Slim Fit Checked Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1754.0,
+      "mrp": 2699.0,
+      "discount_percentage": 35,
+      "in_stock": true,
+      "size_count": 6
+    },
+    {
+      "product_id": 42423680,
+      "brand": "U.S. Polo Assn.",
+      "title": "U.S. Polo Assn. Men Tailored Fit Tartan Checks Checked Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1970.0,
+      "mrp": 2699.0,
+      "discount_percentage": 27,
+      "in_stock": true,
+      "size_count": 5
+    },
+    {
+      "product_id": 42423681,
+      "brand": "U.S. Polo Assn.",
+      "title": "U.S. Polo Assn. Men Tailored Fit Tartan Checks Checked Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1970.0,
+      "mrp": 2699.0,
+      "discount_percentage": 27,
+      "in_stock": true,
+      "size_count": 5
+    },
+    {
+      "product_id": 42423682,
+      "brand": "U.S. Polo Assn.",
+      "title": "U.S. Polo Assn. Men Tailored Fit Checked Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1970.0,
+      "mrp": 2699.0,
+      "discount_percentage": 27,
+      "in_stock": true,
+      "size_count": 5
+    },
+    {
+      "product_id": 42423683,
+      "brand": "U.S. Polo Assn.",
+      "title": "U.S. Polo Assn. Men Tailored Fit Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1924.0,
+      "mrp": 2499.0,
+      "discount_percentage": 23,
+      "in_stock": true,
+      "size_count": 5
+    },
+    {
+      "product_id": 42423684,
+      "brand": "U.S. Polo Assn.",
+      "title": "U.S. Polo Assn. Men Tailored Fit Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1874.0,
+      "mrp": 2499.0,
+      "discount_percentage": 25,
+      "in_stock": true,
+      "size_count": 5
+    },
+    {
+      "product_id": 42423685,
+      "brand": "U.S. Polo Assn.",
+      "title": "U.S. Polo Assn. Men Tailored Fit Printed Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 1824.0,
+      "mrp": 2499.0,
+      "discount_percentage": 27,
+      "in_stock": true,
+      "size_count": 5
+    },
+    {
+      "product_id": 42826877,
+      "brand": "U.S. Polo Assn.",
+      "title": "U.S. Polo Assn. Men Tailored Fit Tartan Checks Checked Casual Shirt",
+      "category": "Shirts",
+      "sub_category": "Casual Shirts",
+      "selling_price": 2078.0,
+      "mrp": 2699.0,
+      "discount_percentage": 23,
+      "in_stock": true,
+      "size_count": 5
+    }
+  ],
+  "failed_products": []
+}

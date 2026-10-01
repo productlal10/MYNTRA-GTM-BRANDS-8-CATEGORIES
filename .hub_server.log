@@ -21,15 +21,11 @@
 WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:3000
- * Running on http://192.168.1.11:3000
+ * Running on http://192.168.29.20:3000
 Press CTRL+C to quit
-127.0.0.1 - - [30/Sep/2026 21:44:18] "GET /api/intelligence/categories HTTP/1.1" 200 -
-127.0.0.1 - - [30/Sep/2026 21:44:18] "GET /favicon.ico HTTP/1.1" 204 -
-127.0.0.1 - - [30/Sep/2026 21:44:18] "GET /api/services HTTP/1.1" 200 -
-127.0.0.1 - - [30/Sep/2026 21:44:18] "GET /api/services HTTP/1.1" 200 -
-127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /api/intelligence/categories HTTP/1.1" 200 -
-127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /api/services HTTP/1.1" 200 -
-127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /favicon.ico HTTP/1.1" 204 -
-127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /api/services HTTP/1.1" 200 -
-127.0.0.1 - - [30/Sep/2026 21:44:20] "GET /sw.js HTTP/1.1" 404 -
-127.0.0.1 - - [30/Sep/2026 21:44:21] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [01/Oct/2026 17:16:46] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [01/Oct/2026 17:17:10] "GET /api/alan/status?auth_token=fash.1790706302.ZmFzaGlvbm9zQGxhbDEwLmNvbQ.0d12524bd1d48c4ec61d9ca5e7c34c50 HTTP/1.1" 200 -
+127.0.0.1 - - [01/Oct/2026 17:17:46] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [01/Oct/2026 17:18:10] "GET /api/alan/status?auth_token=fash.1790706302.ZmFzaGlvbm9zQGxhbDEwLmNvbQ.0d12524bd1d48c4ec61d9ca5e7c34c50 HTTP/1.1" 200 -
+127.0.0.1 - - [01/Oct/2026 17:19:10] "GET /api/alan/status?auth_token=fash.1790706302.ZmFzaGlvbm9zQGxhbDEwLmNvbQ.0d12524bd1d48c4ec61d9ca5e7c34c50 HTTP/1.1" 200 -
+127.0.0.1 - - [01/Oct/2026 17:20:10] "GET /api/alan/status?auth_token=fash.1790706302.ZmFzaGlvbm9zQGxhbDEwLmNvbQ.0d12524bd1d48c4ec61d9ca5e7c34c50 HTTP/1.1" 200 -

@@ -1,2 +1,3 @@
 .db_backups/
 .revoked_sessions
+.env

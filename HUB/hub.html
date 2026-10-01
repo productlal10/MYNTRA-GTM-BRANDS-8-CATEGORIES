@@ -469,7 +469,7 @@ body{
 
 <body>
 
-<header class="site-header">
+<header class="site-header" style="display:flex;justify-content:space-between;align-items:center;">
   <div class="brand">
     <div class="brand-name">LAL10</div>
     <div class="brand-divider"></div>
@@ -478,6 +478,9 @@ body{
       <span>INTELLIGENCE</span>
     </div>
   </div>
+  <a href="/alan" style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(23,23,23,0.85);color:#fff;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.15);transition:all 0.2s;">
+    ⚡ Scraper Ops (/alan)
+  </a>
 </header>
 
 <section class="hero">
@@ -534,7 +537,7 @@ const CATEGORIES = [
     title: "Activewear",
     subtitle: "Trend Intelligence",
     route: "/activewear/",
-    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 42%"
   },
   {
@@ -543,7 +546,7 @@ const CATEGORIES = [
     title: "Polo",
     subtitle: "Trend Intelligence",
     route: "/polos/",
-    image: "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 40%"
   },
   {
@@ -552,7 +555,7 @@ const CATEGORIES = [
     title: "Ethnicwear",
     subtitle: "Trend Intelligence",
     route: "/ethnic/",
-    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 40%"
   },
   {
@@ -561,7 +564,7 @@ const CATEGORIES = [
     title: "Westernwear",
     subtitle: "Trend Intelligence",
     route: "/westernwear/",
-    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 35%"
   },
   {
@@ -570,7 +573,7 @@ const CATEGORIES = [
     title: "Shirts",
     subtitle: "Trend Intelligence",
     route: "/shirts/",
-    image: "https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 36%"
   },
   {
@@ -579,7 +582,7 @@ const CATEGORIES = [
     title: "Kidswear",
     subtitle: "Trend Intelligence",
     route: "/kids/",
-    image: "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 42%"
   },
   {
@@ -588,7 +591,7 @@ const CATEGORIES = [
     title: "Occasionwear",
     subtitle: "Trend Intelligence",
     route: "/occasionwear/",
-    image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 43%"
   },
   {
@@ -597,7 +600,7 @@ const CATEGORIES = [
     title: "Innerwear",
     subtitle: "Trend Intelligence",
     route: "/innerwear/",
-    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 38%"
   },
   {
@@ -606,7 +609,7 @@ const CATEGORIES = [
     title: "Special Arrow X USpolo",
     subtitle: "Trend Intelligence",
     route: "/special/",
-    image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 42%"
   },
   {
@@ -615,7 +618,7 @@ const CATEGORIES = [
     title: "Maneet",
     subtitle: "Shirts Intelligence",
     route: "/maneet/",
-    image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1200&q=88",
+    image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=600&q=75",
     objectPos: "center 38%"
   }
 ];
@@ -637,7 +640,7 @@ function getSessionToken() {
 }
 
 function resolveCardUrl(category) {
-  const isLocal = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && (window.location.port === "3000" || !window.location.port);
+  const isLocal = window.location.port === "3000" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   if (isLocal && category.port) {
     const token = getSessionToken();
     const tokenQuery = token ? `?auth_token=${encodeURIComponent(token)}` : "";
@@ -663,6 +666,7 @@ function renderCategories(categories) {
         src="${category.image}"
         alt="${category.title}"
         loading="lazy"
+        decoding="async"
         style="object-position:${category.objectPos || "center"}"
       >
 
