@@ -1526,7 +1526,7 @@ function renderCategories(services) {
         <button class="btn secondary sm" onclick="openLogs('${cat.folder}')">
           Logs
         </button>
-        <a class="btn secondary sm" href="http://${window.location.hostname}:${cat.port}/" target="_blank">
+        <a class="btn secondary sm" href="${window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? `http://${window.location.hostname}:${cat.port}/` : `${window.location.protocol}//${window.location.hostname}${cat.hub_card?.route || ('/' + (cat.slug || cat.folder.toLowerCase()) + '/')}`}" target="_blank">
           UI
         </a>
       </div>

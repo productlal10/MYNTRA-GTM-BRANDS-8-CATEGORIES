@@ -43,85 +43,85 @@
       "price-intel": {
         "enabled": true,
         "label": "Price Intelligence",
-        "order": 5,
+        "order": 6,
         "category": "Intelligence"
       },
       "revenue-intel": {
         "enabled": true,
         "label": "Revenue Intelligence",
-        "order": 6,
+        "order": 7,
         "category": "Intelligence"
       },
       "colors": {
         "enabled": true,
         "label": "Color Intelligence",
-        "order": 7,
+        "order": 8,
         "category": "Intelligence"
       },
       "fabric": {
         "enabled": true,
         "label": "Fabric Intelligence",
-        "order": 8,
+        "order": 9,
         "category": "Intelligence"
       },
       "catalog": {
         "enabled": true,
         "label": "Product Catalog",
-        "order": 9,
+        "order": 10,
         "category": "Catalog"
       },
       "brands": {
         "enabled": true,
         "label": "Brands Intelligence",
-        "order": 10,
+        "order": 11,
         "category": "Intelligence"
       },
       "compare": {
         "enabled": true,
         "label": "Compare Products",
-        "order": 11,
+        "order": 12,
         "category": "Catalog"
       },
       "category-analysis": {
         "enabled": true,
         "label": "Category Analysis",
-        "order": 12,
+        "order": 13,
         "category": "Intelligence"
       },
       "insights": {
         "enabled": true,
         "label": "Trend Intel",
-        "order": 13,
+        "order": 14,
         "category": "Analytics"
       },
       "daily-movement": {
         "enabled": true,
         "label": "Market Moves",
-        "order": 14,
+        "order": 15,
         "category": "Analytics"
       },
       "analytics-intelligence": {
         "enabled": true,
         "label": "Sales Monitor",
-        "order": 15,
+        "order": 16,
         "category": "Analytics"
       },
       "scraper-logs": {
         "enabled": true,
         "label": "Logs",
-        "order": 16,
+        "order": 17,
         "category": "System"
       },
       "data-issues": {
         "enabled": true,
         "label": "Data Issues",
-        "order": 17,
+        "order": 18,
         "category": "System"
       },
       "ai-assistant": {
         "enabled": true,
         "label": "AI Assistant",
-        "order": 18,
+        "order": 19,
         "category": "System"
       }
     }

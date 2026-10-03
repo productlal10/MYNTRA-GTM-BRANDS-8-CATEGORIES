@@ -1122,7 +1122,7 @@ function getSessionToken() {
 }
 
 function resolveTargetUrl(port, route, subhash) {
-  const isLocal = window.location.port === "3000" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   const token = getSessionToken();
   const tokenQuery = token ? `?auth_token=${encodeURIComponent(token)}` : "";
   const hashPart = subhash ? `#${subhash.replace(/^#/, "")}` : "";
@@ -1130,8 +1130,11 @@ function resolveTargetUrl(port, route, subhash) {
   if (isLocal && port) {
     return `http://${window.location.hostname}:${port}/${tokenQuery}${hashPart}`;
   }
-  const base = route || "/";
-  return `${base}${tokenQuery}${hashPart}`;
+  // On remote/production server (Nginx proxies all category routes on port 80/443):
+  // Strip non-standard ports (like 3000) so navigation goes to Nginx on port 80/443
+  const origin = `${window.location.protocol}//${window.location.hostname}${window.location.port && !['80','443','3000'].includes(window.location.port) ? ':' + window.location.port : ''}`;
+  const base = route.startsWith('/') ? route : `/${route}`;
+  return `${origin}${base}${tokenQuery}${hashPart}`;
 }
 
 // Wire up card clicks and link routing
