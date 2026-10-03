@@ -1,3 +1,15 @@
 .db_backups/
 .revoked_sessions
 .env
+cookies.txt
+.run_all_scrapers.lock
+__pycache__/
+*.pyc
+.pipeline.lock/
+.pipeline_logs/
+.scraper_logs/
+.hub_server.log
+.running_pids
+.scraper_pids
+.sync_tmp/
+.DS_Store

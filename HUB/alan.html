@@ -245,6 +245,7 @@ body{
   color:var(--ink-secondary);
 }
 
+.btn.local-ctl[disabled]{opacity:.45;cursor:not-allowed;}
 .control-bar-right{
   display:flex;
   align-items:center;
@@ -511,22 +512,547 @@ body{
   from{transform:translateY(12px);opacity:0}
   to{transform:translateY(0);opacity:1}
 }
+
+/* Console Header Tabs */
+.console-tabs{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  background:var(--bg-subtle);
+  padding:4px;
+  border-radius:var(--radius-pill);
+  border:1px solid var(--border);
+}
+
+.console-tab-btn{
+  font-family:var(--font-sans);
+  font-size:13px;
+  font-weight:500;
+  padding:6px 16px;
+  border-radius:var(--radius-pill);
+  border:none;
+  background:transparent;
+  color:var(--ink-secondary);
+  cursor:pointer;
+  transition:all 0.15s ease;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+
+.console-tab-btn.active{
+  background:#000000;
+  color:#ffffff;
+  font-weight:600;
+}
+
+.console-tab-btn:hover:not(.active){
+  color:var(--ink);
+}
+
+/* Sidebar Manager Styles */
+.section-panel{
+  display:none;
+}
+.section-panel.active{
+  display:block;
+}
+
+.sb-panel-grid{
+  display:grid;
+  grid-template-columns:1fr 340px;
+  gap:28px;
+  align-items:start;
+}
+
+@media(max-width:1100px){
+  .sb-panel-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+.sb-config-card{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  margin-bottom:24px;
+}
+
+.sb-config-card-title{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:4px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.sb-config-card-sub{
+  font-size:13px;
+  color:var(--ink-secondary);
+  margin-bottom:18px;
+}
+
+/* Category Scope Selector Bar */
+.scope-scroll-bar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:10px;
+  margin-bottom:20px;
+}
+
+.scope-pill-btn{
+  font-family:var(--font-sans);
+  font-size:12px;
+  font-weight:600;
+  padding:6px 14px;
+  border-radius:var(--radius-pill);
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--ink-secondary);
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all 0.15s ease;
+}
+
+.scope-pill-btn.active{
+  background:#000000;
+  color:#ffffff;
+  border-color:#000000;
+}
+
+.scope-pill-btn:hover:not(.active){
+  border-color:var(--ink);
+  color:var(--ink);
+}
+
+/* Display Mode Radio Cards */
+.display-modes-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.display-mode-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:14px;
+  cursor:pointer;
+  transition:all 0.15s ease;
+  background:var(--bg-subtle);
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.display-mode-card.active{
+  border-color:#000000;
+  background:#ffffff;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+
+.display-mode-card input{
+  display:none;
+}
+
+.display-mode-title{
+  font-size:13px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.display-mode-desc{
+  font-size:11px;
+  color:var(--ink-secondary);
+}
+
+/* Switches & Toggles */
+.switches-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.switch-label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-radius:var(--radius-sm);
+  background:var(--bg-subtle);
+  border:1px solid var(--border);
+  cursor:pointer;
+  user-select:none;
+  transition:all 0.15s ease;
+}
+
+.switch-label:hover{
+  border-color:var(--ink);
+}
+
+.switch-text-group{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.switch-title{
+  font-size:13px;
+  font-weight:600;
+  color:var(--ink);
+}
+
+.switch-desc{
+  font-size:11px;
+  color:var(--ink-secondary);
+}
+
+.toggle-switch{
+  position:relative;
+  display:inline-block;
+  width:42px;
+  height:22px;
+  flex-shrink:0;
+  cursor:pointer;
+}
+
+.toggle-switch input{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  margin:0;
+  padding:0;
+  z-index:2;
+  cursor:pointer;
+}
+
+.slider{
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  background-color:#d1d5db;
+  transition:.2s;
+  border-radius:22px;
+  pointer-events:none;
+}
+
+.slider:before{
+  position:absolute;
+  content:"";
+  height:16px;
+  width:16px;
+  left:3px;
+  bottom:3px;
+  background-color:white;
+  transition:.2s;
+  border-radius:50%;
+  box-shadow:0 1px 3px rgba(0,0,0,0.2);
+}
+
+input:checked + .slider{
+  background-color:#000000;
+}
+
+input:checked + .slider:before{
+  transform:translateX(20px);
+}
+
+/* Preset Toolbar */
+.presets-toolbar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.preset-chip-btn{
+  font-family:var(--font-sans);
+  font-size:12px;
+  font-weight:500;
+  padding:5px 12px;
+  border-radius:var(--radius-pill);
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--ink);
+  cursor:pointer;
+  transition:all 0.15s ease;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+
+.preset-chip-btn:hover{
+  background:var(--bg-subtle);
+  border-color:var(--ink);
+}
+
+/* Nav Item Management Cards Grid */
+.nav-items-manage-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(290px, 1fr));
+  gap:12px;
+}
+
+.nav-item-manage-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:14px;
+  background:var(--card-bg);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  transition:all 0.15s ease;
+}
+
+.nav-item-manage-card.item-disabled{
+  opacity:0.55;
+  background:var(--bg-subtle);
+}
+
+.nav-item-manage-card:hover{
+  border-color:var(--ink);
+}
+
+.nav-item-manage-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.nav-item-meta{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav-item-icon-box{
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  background:var(--bg-subtle);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--ink);
+  border:1px solid var(--border);
+  font-size:14px;
+  flex-shrink:0;
+}
+
+.nav-item-title-box{
+  display:flex;
+  flex-direction:column;
+}
+
+.nav-item-name{
+  font-size:13px;
+  font-weight:700;
+  color:var(--ink);
+}
+
+.nav-item-category-tag{
+  font-size:10px;
+  font-family:var(--font-mono);
+  color:var(--ink-secondary);
+}
+
+.nav-item-edit-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.nav-item-edit-input{
+  flex:1;
+  font-family:var(--font-sans);
+  font-size:12px;
+  padding:6px 10px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:var(--bg);
+  color:var(--ink);
+}
+
+.nav-item-edit-input:focus{
+  outline:none;
+  border-color:#000000;
+}
+
+.landing-badge-btn{
+  font-size:11px;
+  font-family:var(--font-mono);
+  font-weight:600;
+  padding:4px 8px;
+  border-radius:var(--radius-pill);
+  border:1px solid var(--border);
+  background:var(--bg-subtle);
+  color:var(--ink-secondary);
+  cursor:pointer;
+  transition:all 0.15s ease;
+}
+
+.landing-badge-btn.is-landing{
+  background:#000000;
+  color:#ffffff;
+  border-color:#000000;
+}
+
+/* Live Miniature Sidebar Preview Box */
+.live-preview-box{
+  position:sticky;
+  top:85px;
+  background:#ffffff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:0 12px 32px rgba(0,0,0,0.06);
+}
+
+.preview-header{
+  padding:12px 16px;
+  background:#f8fafc;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.preview-title{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+  color:var(--ink-secondary);
+}
+
+.preview-sidebar{
+  width:100%;
+  max-height:540px;
+  overflow-y:auto;
+  background:#ffffff;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.preview-brand{
+  padding:8px 6px 12px;
+  border-bottom:1px solid #f1f5f9;
+  margin-bottom:8px;
+  display:flex;
+  flex-direction:column;
+}
+
+.preview-brand-name{
+  font-size:14px;
+  font-weight:800;
+}
+
+.preview-brand-sub{
+  font-size:8px;
+  font-weight:700;
+  color:#64748b;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.preview-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:500;
+  color:#334155;
+  background:transparent;
+}
+
+.preview-item.active{
+  background:#f1f5f9;
+  color:#0f172a;
+  font-weight:700;
+}
+
+.preview-item-icon{
+  width:14px;
+  text-align:center;
+  font-size:12px;
+}
+
+.preview-status{
+  margin-top:12px;
+  padding:8px 10px;
+  border-radius:6px;
+  background:#f8fafc;
+  border:1px solid #f1f5f9;
+  font-size:10px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.preview-footer{
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px solid #f1f5f9;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.preview-avatar{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#000000;
+  color:#ffffff;
+  font-size:9px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 </style>
 </head>
 <body>
 
 <!-- Minimal Navigation -->
 <nav class="navbar">
-  <a href="/" class="brand-block">
-    <span class="brand-title">LAL10</span>
+  <a href="/" class="brand-block" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+    <img src="https://launchpad.lal10.com/logo.png" alt="LAL10" style="height:26px;width:auto;object-fit:contain;" />
+    <span style="width:1px;height:20px;background:var(--border);display:inline-block;"></span>
+    <img src="https://thefashionos.com/assets/logo-Dl4_z_fN.png" alt="FashionOS" style="height:22px;width:auto;object-fit:contain;" />
     <span class="brand-badge">CONSOLE /alan</span>
   </a>
+
+  <!-- Top Console Mode Switcher Tabs -->
+  <div class="console-tabs">
+    <button class="console-tab-btn active" id="tabScrapersBtn" onclick="switchConsoleTab('scrapers')">
+      <span>⚡</span> <span>Scrapers & EC2</span>
+    </button>
+    <button class="console-tab-btn" id="tabSidebarBtn" onclick="switchConsoleTab('sidebar')">
+      <span>📑</span> <span>Sidebar & Navigation</span>
+    </button>
+  </div>
 
   <div class="nav-actions">
     <a href="/" class="btn secondary sm">
       Hub Home
     </a>
-    <button class="btn secondary sm" onclick="fetchStatus(true)" id="refreshBtn">
+    <button class="btn secondary sm" onclick="handleRefresh()" id="refreshBtn">
       Refresh
     </button>
   </div>
@@ -534,76 +1060,322 @@ body{
 
 <div class="container">
 
-  <!-- Page Header -->
-  <header class="page-header">
-    <h1 class="page-title">Scraper & Cron Console</h1>
-    <p class="page-subtitle">Manual controls, real-time crawler process tracking, and execution logs across all 10 categories.</p>
-  </header>
+  <!-- ========================================================
+       TAB 1: SCRAPER & CRON CONSOLE
+       ======================================================== -->
+  <div class="section-panel active" id="scrapersSection">
+    <!-- Page Header -->
+    <header class="page-header">
+      <h1 class="page-title">Scraper & Cron Console</h1>
+      <p class="page-subtitle">Manual controls, real-time crawler process tracking, and execution logs across all 10 categories.</p>
+    </header>
 
-  <!-- Summary KPI Cards -->
-  <div class="metrics-grid">
-    <div class="metric-card">
-      <div class="metric-label">Active Scraper Jobs</div>
-      <div class="metric-value" id="activeJobsVal">0 <span style="font-size:15px;font-weight:400;color:var(--ink-secondary)">/ 10</span></div>
-      <div class="metric-sub" id="activeJobsSub">All categories idle</div>
+    <!-- Summary KPI Cards -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Active Scraper Jobs</div>
+        <div class="metric-value" id="activeJobsVal">—</div>
+        <div class="metric-sub" id="activeJobsSub">All categories idle</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Total Tracked Products</div>
+        <div class="metric-value" id="totalProductsVal">—</div>
+        <div class="metric-sub">Across 10 category databases</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Daily Cron Trigger</div>
+        <div class="metric-value" style="font-size:22px;font-family:var(--font-mono);">0 2 * * *</div>
+        <div class="metric-sub">Every night at 02:00 AM IST</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Production Pipeline</div>
+        <div class="metric-value" id="pipelineMetricVal" style="font-size:20px;">EC2 Auto-Sync</div>
+        <div class="metric-sub" id="pipelineMetricSub">Host: —</div>
+      </div>
     </div>
 
-    <div class="metric-card">
-      <div class="metric-label">Total Tracked Products</div>
-      <div class="metric-value" id="totalProductsVal">—</div>
-      <div class="metric-sub">Across 10 category databases</div>
+    <!-- Master Controls Bar -->
+    <div class="control-bar">
+      <div class="control-bar-left">
+        <div class="control-bar-title">Batch Execution & EC2 Synchronization</div>
+        <div class="control-bar-sub">Launch or stop scrapers and sync local database state directly to EC2 production</div>
+      </div>
+
+      <div class="control-bar-right">
+        <button class="btn primary local-ctl" onclick="triggerSync('all')" id="syncAllBtn" style="background:#0f172a; border-color:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+          <span>☁️</span> <span>Sync All to EC2</span>
+        </button>
+
+        <button class="btn secondary local-ctl" onclick="triggerScrape('all', 'parallel')">
+          Start All (Parallel)
+        </button>
+
+        <button class="btn secondary local-ctl" onclick="triggerScrape('all', 'sequential')">
+          Start All (Sequential)
+        </button>
+
+        <button class="btn secondary local-ctl" onclick="stopScrape('all')">
+          Stop All
+        </button>
+      </div>
     </div>
 
-    <div class="metric-card">
-      <div class="metric-label">Daily Cron Trigger</div>
-      <div class="metric-value" style="font-size:22px;font-family:var(--font-mono);">0 2 * * *</div>
-      <div class="metric-sub">Every night at 02:00 AM IST</div>
-    </div>
-
-    <div class="metric-card">
-      <div class="metric-label">Production Pipeline</div>
-      <div class="metric-value" style="font-size:20px;">EC2 Auto-Sync</div>
-      <div class="metric-sub">Target: /var/www/myntra_gtm</div>
+    <!-- Category Scrapers Grid -->
+    <div class="categories-grid" id="categoriesGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--ink-secondary);">
+        Loading category scraper statuses…
+      </div>
     </div>
   </div>
 
-  <!-- Master Controls Bar -->
-  <div class="control-bar">
-    <div class="control-bar-left">
-      <div class="control-bar-title">Batch Execution Controls</div>
-      <div class="control-bar-sub">Launch or terminate all category scrapers simultaneously</div>
+  <!-- ========================================================
+       TAB 2: SIDEBAR & NAVIGATION MANAGER
+       ======================================================== -->
+  <div class="section-panel" id="sidebarManagerSection">
+    <!-- Page Header -->
+    <header class="page-header" style="display:flex; flex-direction:row; justify-content:space-between; align-items:flex-end;">
+      <div>
+        <h1 class="page-title">Sidebar & Navigation Control</h1>
+        <p class="page-subtitle">Manage sidebar visibility, toggle navigation tabs, customize tab names, and configure landing views.</p>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn secondary sm" onclick="resetSidebarConfigAdmin()">
+          ↺ Reset Defaults
+        </button>
+        <button class="btn primary sm" onclick="saveSidebarConfigAdmin()" id="saveSidebarBtn">
+          💾 Save Sidebar Settings
+        </button>
+      </div>
+    </header>
+
+    <!-- Scope Selector (Global vs Category Overrides) -->
+    <div style="margin-bottom:18px;">
+      <div style="font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:var(--ink-secondary); margin-bottom:8px;">
+        Configuration Target Scope:
+      </div>
+      <div class="scope-scroll-bar" id="scopePillsBar">
+        <button class="scope-pill-btn active" data-scope="_global" onclick="selectSidebarScope('_global')">
+          🌐 Global Default (All Categories)
+        </button>
+        <!-- Category scope pills injected dynamically -->
+      </div>
     </div>
 
-    <div class="control-bar-right">
-      <button class="btn primary" onclick="triggerScrape('all', 'parallel')">
-        Start All (Parallel)
-      </button>
+    <!-- Main Grid: Controls on Left, Live Mockup on Right -->
+    <div class="sb-panel-grid">
+      <!-- Left Config Controls Column -->
+      <div class="sb-controls-col">
 
-      <button class="btn secondary" onclick="triggerScrape('all', 'sequential')">
-        Start All (Sequential)
-      </button>
+        <!-- Master Display & Behavior Options Card -->
+        <div class="sb-config-card">
+          <div class="sb-config-card-title">
+            <span>🖥️ Sidebar Display & Behavior</span>
+            <span id="scopeActiveLabel" style="font-size:11px; font-family:var(--font-mono); font-weight:600; padding:2px 8px; border-radius:12px; background:var(--bg-subtle); border:1px solid var(--border);">Global</span>
+          </div>
+          <div class="sb-config-card-sub">Control whether the sidebar is visible by default, collapsed as icons, or completely hidden.</div>
 
-      <button class="btn secondary" onclick="stopScrape('all')">
-        Stop All
-      </button>
+          <!-- Display Mode Selection -->
+          <div style="font-size:12px; font-weight:600; color:var(--ink); margin-bottom:8px;">Default Sidebar Display Mode</div>
+          <div class="display-modes-grid">
+            <label class="display-mode-card active" id="modeCardVisible" onclick="setDisplayMode('visible')">
+              <input type="radio" name="displayModeRadio" value="visible" checked>
+              <div class="display-mode-title">
+                <span>👁️</span> <span>Visible</span>
+              </div>
+              <div class="display-mode-desc">Standard full-width sidebar expanded by default.</div>
+            </label>
+
+            <label class="display-mode-card" id="modeCardCollapsed" onclick="setDisplayMode('collapsed')">
+              <input type="radio" name="displayModeRadio" value="collapsed">
+              <div class="display-mode-title">
+                <span>📐</span> <span>Collapsed</span>
+              </div>
+              <div class="display-mode-desc">Compact mini icon rail (82px) by default.</div>
+            </label>
+
+            <label class="display-mode-card" id="modeCardHidden" onclick="setDisplayMode('hidden')">
+              <input type="radio" name="displayModeRadio" value="hidden">
+              <div class="display-mode-title">
+                <span>🚫</span> <span>Hidden</span>
+              </div>
+              <div class="display-mode-desc">Completely hidden; full viewport for analytics.</div>
+            </label>
+          </div>
+
+          <!-- Master Layout Toggle Switches -->
+          <div class="switches-grid">
+            <div class="switch-label">
+              <div class="switch-text-group">
+                <span class="switch-title">Allow User Toggle</span>
+                <span class="switch-desc">Show hamburger / top button to expand/collapse</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfgAllowUserToggle" onchange="onSidebarConfigFieldChange()">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="switch-label">
+              <div class="switch-text-group">
+                <span class="switch-title">Show Brand Header</span>
+                <span class="switch-desc">Display "LAL10 FASHION INTELLIGENCE" header</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfgShowBrandHeader" onchange="onSidebarConfigFieldChange()">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="switch-label">
+              <div class="switch-text-group">
+                <span class="switch-title">Live Sync Status Box</span>
+                <span class="switch-desc">Display "Connected to Myntra Live Sync" badge</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfgShowSyncStatus" onchange="onSidebarConfigFieldChange()">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="switch-label">
+              <div class="switch-text-group">
+                <span class="switch-title">User Profile Footer</span>
+                <span class="switch-desc">Display bottom user avatar and sign-out row</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfgShowUserProfile" onchange="onSidebarConfigFieldChange()">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="switch-label">
+              <div class="switch-text-group">
+                <span class="switch-title">Sub-Sidebars (Filter Drawers)</span>
+                <span class="switch-desc">Allow in-page analysis scope & fabric filter drawers</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfgShowSubSidebars" onchange="onSidebarConfigFieldChange()">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="switch-label" style="cursor:default;">
+              <div class="switch-text-group">
+                <span class="switch-title">Default Landing Tab</span>
+                <span class="switch-desc">View loaded first when dashboard opens</span>
+              </div>
+              <select id="cfgDefaultLandingSelect" onchange="onSidebarConfigFieldChange()" style="font-size:12px; font-weight:600; padding:4px 8px; border:1px solid var(--border); border-radius:6px; background:#fff;">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Content & Navigation Items Card -->
+        <div class="sb-config-card">
+          <div class="sb-config-card-title">
+            <span>📑 Manage Sidebar Content & Tabs</span>
+            <span style="font-size:11px; color:var(--ink-secondary);">17 Navigation Modules</span>
+          </div>
+          <div class="sb-config-card-sub">Enable or hide specific views, customize label text, or set default landing views.</div>
+
+          <!-- Quick Presets Toolbar -->
+          <div class="presets-toolbar">
+            <span style="font-size:11px; font-weight:700; color:var(--ink-secondary); text-transform:uppercase;">Presets:</span>
+            <button class="preset-chip-btn" onclick="applyPreset('all_on')">✨ Enable All</button>
+            <button class="preset-chip-btn" onclick="applyPreset('executive')">📊 Executive / Analytics</button>
+            <button class="preset-chip-btn" onclick="applyPreset('merchandising')">🏷️ Merchandising & Catalog</button>
+            <button class="preset-chip-btn" onclick="applyPreset('system_ops')">⚙️ Scraper & Ops Only</button>
+            <button class="preset-chip-btn" onclick="applyPreset('minimal')">⚡ Minimal Core</button>
+          </div>
+
+          <!-- Filter and Search Bar -->
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:16px; padding:10px 14px; background:var(--bg-subtle); border-radius:var(--radius-sm); border:1px solid var(--border);">
+            <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:180px;">
+              <span style="font-size:13px; color:var(--ink-secondary);">🔍</span>
+              <input type="text" id="navItemSearchInput" placeholder="Filter tabs by name or keyword..." oninput="onNavItemSearchChange(this.value)" style="flex:1; font-family:var(--font-sans); font-size:12px; border:none; background:transparent; outline:none; color:var(--ink);">
+            </div>
+            <div style="display:flex; gap:4px; align-items:center; flex-wrap:wrap;" id="groupFilterPills">
+              <button class="scope-pill-btn active" style="padding:3px 10px; font-size:11px;" onclick="setNavGroupFilter('all', this)">All</button>
+              <button class="scope-pill-btn" style="padding:3px 10px; font-size:11px;" onclick="setNavGroupFilter('Overview', this)">Overview</button>
+              <button class="scope-pill-btn" style="padding:3px 10px; font-size:11px;" onclick="setNavGroupFilter('Intelligence', this)">Intelligence</button>
+              <button class="scope-pill-btn" style="padding:3px 10px; font-size:11px;" onclick="setNavGroupFilter('Catalog', this)">Catalog</button>
+              <button class="scope-pill-btn" style="padding:3px 10px; font-size:11px;" onclick="setNavGroupFilter('Analytics', this)">Analytics</button>
+              <button class="scope-pill-btn" style="padding:3px 10px; font-size:11px;" onclick="setNavGroupFilter('System', this)">System</button>
+            </div>
+          </div>
+
+          <!-- Navigation Items Management Grid -->
+          <div class="nav-items-manage-grid" id="navItemsManageGrid">
+            <!-- Dynamically populated with all 17 navigation item cards -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Live Simulated Preview Mockup -->
+      <div class="sb-preview-col">
+        <div class="live-preview-box">
+          <div class="preview-header">
+            <div>
+              <span class="preview-title">Live Preview</span>
+              <span id="previewModeBadge" style="font-size:10px; font-weight:700; font-family:var(--font-mono); padding:2px 6px; border-radius:4px; background:#000; color:#fff; margin-left:4px;">VISIBLE</span>
+            </div>
+            <button class="btn secondary sm" style="padding:3px 8px; font-size:11px;" onclick="togglePreviewCollapse()" title="Test Collapsed/Expanded layout">
+              📐 Toggle Width
+            </button>
+          </div>
+          <div class="preview-sidebar" id="previewSidebarContainer">
+            <!-- Simulated miniature live sidebar -->
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Category Scrapers Grid -->
-  <div class="categories-grid" id="categoriesGrid">
-    <div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--ink-secondary);">
-      Loading category scraper statuses…
-    </div>
   </div>
 
 </div>
 
 <!-- Minimalist Log Modal -->
+<div class="modal-backdrop" id="sourcesModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="sourcesTitle">Sources</div>
+      <div class="modal-actions">
+        <button class="btn primary sm local-ctl" id="sourcesScrapeBtn" onclick="scrapeSourcesNow()">Scrape now</button>
+        <button class="btn secondary sm" onclick="closeSources()">Close</button>
+      </div>
+    </div>
+    <div style="padding:16px 20px; overflow:auto;">
+      <p style="font-size:12px; color:var(--ink-secondary); margin:0 0 8px;">
+        Paste Myntra product or listing links, or Shopify store / collection / product links — one per line.
+        Saved links are scraped with this category (nightly and on Scrape), before its snapshot.
+        Shopify stores show price, discount and size availability, but not stock, so no sales are estimated for them.
+      </p>
+      <textarea id="sourcesInput" class="local-ctl" rows="4" style="width:100%; font-family:monospace; font-size:12px; padding:8px; border:1px solid #e2e8f0; border-radius:6px;"
+        placeholder="https://almostgods.com/collections/shirts&#10;https://www.myntra.com/shirts?f=Brand%3AQB%20MEN&#10;https://www.myntra.com/33069151"></textarea>
+      <div style="display:flex; gap:8px; align-items:center; margin:8px 0 14px;">
+        <button class="btn secondary sm local-ctl" onclick="addSources()">Add links</button>
+        <span id="sourcesMsg" style="font-size:12px; color:var(--ink-secondary);"></span>
+      </div>
+      <div id="sourcesList" style="font-size:12px;"></div>
+      <div style="font-size:11px; font-weight:700; color:var(--ink-secondary); margin:16px 0 6px;">LAST SOURCES RUN</div>
+      <div class="modal-body" id="sourcesLog" style="max-height:240px;">No runs yet.</div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="logModal">
   <div class="modal-box">
     <div class="modal-header">
       <div class="modal-title" id="modalTitle">Category Log Stream</div>
       <div class="modal-actions">
+        <button class="btn secondary sm local-ctl" id="stopSyncBtn" style="display:none; color:#b91c1c; border-color:#fca5a5;" onclick="stopSync()">
+          Stop Sync
+        </button>
         <button class="btn secondary sm" onclick="toggleAutoScroll()" id="autoScrollBtn">
           Auto-scroll: ON
         </button>
@@ -622,21 +1394,21 @@ body{
 <div class="toast-box" id="toastBox"></div>
 
 <script>
-const CATEGORIES = [
-  { folder: "Maneet", name: "Maneet Brands Shirts", port: 3020, db: "maneet_brands_shirts", subtitle: "14 Brands (₹700–₹3k)" },
-  { folder: "SPECIAL", name: "Special Arrow X USpolo", port: 3019, db: "ghanshaym_special", subtitle: "Strict 17 SKUs" },
-  { folder: "Shirts", name: "Shirts Intelligence", port: 3011, db: "gtm_shirts_myntra", subtitle: "17 Curated Brands" },
-  { folder: "POLOS", name: "Polo Intelligence", port: 3009, db: "polos_myntra_data", subtitle: "8 Polo Brands" },
-  { folder: "ACTIVEWEAR", name: "Activewear Intelligence", port: 3008, db: "activewear_myntra_data", subtitle: "6 Sport & Gym Brands" },
-  { folder: "Kids", name: "Kidswear Intelligence", port: 3010, db: "kids_gtm", subtitle: "6 Kids Apparel Brands" },
-  { folder: "Westerwear", name: "Westernwear Intelligence", port: 3012, db: "westernwear_gtm", subtitle: "6 Western Brands" },
-  { folder: "Hosiery", name: "Innerwear / Hosiery", port: 3013, db: "hosiery_gtm", subtitle: "Missy & Lyra Brands" },
-  { folder: "Ocassionwear", name: "Occasionwear Intelligence", port: 3014, db: "ocassionwear_gtm", subtitle: "5 Festive & Wedding Brands" },
-  { folder: "WOMEN ETHNIC", name: "Women Ethnic Wear", port: 3015, db: "women_ethnic_myntra_data", subtitle: "9 Ethnic Brands" }
-];
-
 let activeFolder = null;
+let isSyncModal = false;
+// Scraping and syncing only run on localhost; the server says whether this visit may use them.
+let controlsAllowed = true;
+
+function applyControlsState() {
+  document.querySelectorAll(".local-ctl").forEach(btn => {
+    btn.disabled = !controlsAllowed;
+    if (!controlsAllowed) btn.title = "Scraping and syncing run only on localhost";
+  });
+  const sub = document.querySelector(".control-bar-sub");
+  if (sub && !controlsAllowed) sub.textContent = "Read-only here — scraping and EC2 sync can only be started on localhost";
+}
 let pollTimer = null;
+let syncPollTimer = null;
 let autoScroll = true;
 
 function showToast(msg) {
@@ -665,7 +1437,9 @@ async function fetchStatus(isManual = false) {
     const res = await fetch(`/api/alan/status?auth_token=${encodeURIComponent(token)}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+    controlsAllowed = data.scraper_controls !== false;
     renderCategories(data.services || []);
+    applyControlsState();
     updateMetrics(data);
     if (isManual) showToast("Status updated");
   } catch (err) {
@@ -676,8 +1450,15 @@ async function fetchStatus(isManual = false) {
 
 function updateMetrics(data) {
   const runningCount = (data.services || []).filter(s => s.is_running).length;
-  document.getElementById("activeJobsVal").innerHTML = `${runningCount} <span style="font-size:15px;font-weight:400;color:var(--ink-secondary)">/ 10</span>`;
+  document.getElementById("activeJobsVal").innerHTML = `${runningCount} <span style="font-size:15px;font-weight:400;color:var(--ink-secondary)">/ ${(data.services || []).length}</span>`;
   document.getElementById("activeJobsSub").innerText = runningCount > 0 ? `${runningCount} scraper(s) actively running` : "All categories idle";
+
+  // Fill the host in once; afterwards this box shows sync progress and results.
+  const hostEl = document.getElementById("pipelineMetricSub");
+  if (data.ec2_host && !hostEl.dataset.hostSet) {
+    hostEl.innerText = `Host: ${data.ec2_host}`;
+    hostEl.dataset.hostSet = "1";
+  }
 
   if (data.total_products !== undefined) {
     document.getElementById("totalProductsVal").innerText = Number(data.total_products).toLocaleString();
@@ -688,11 +1469,9 @@ function renderCategories(services) {
   const grid = document.getElementById("categoriesGrid");
   grid.innerHTML = "";
 
-  const svcMap = {};
-  services.forEach(s => svcMap[s.folder] = s);
-
-  CATEGORIES.forEach(cat => {
-    const live = svcMap[cat.folder] || {};
+  // The category list comes from the server (categories.json), so nothing here needs editing per category.
+  services.forEach(live => {
+    const cat = { ...live, name: live.admin_title || live.name };
     const isRunning = Boolean(live.is_running);
     const prodCount = live.product_count !== undefined ? Number(live.product_count).toLocaleString() : "—";
     const lastLog = live.latest_log || "No recent activity recorded";
@@ -719,7 +1498,7 @@ function renderCategories(services) {
           </div>
           <div class="detail-item">
             <span class="detail-label">Scope</span>
-            <span class="detail-value" style="font-size:12px;font-family:var(--font-sans);">${cat.subtitle}</span>
+            <span class="detail-value" style="font-size:12px;font-family:var(--font-sans);">${escapeHtml(cat.subtitle || "")}</span>
           </div>
         </div>
 
@@ -730,14 +1509,20 @@ function renderCategories(services) {
 
       <div class="cat-bottom-actions">
         ${isRunning ? `
-          <button class="btn secondary sm" style="flex:1;" onclick="stopScrape('${cat.folder}')">
+          <button class="btn secondary sm local-ctl" style="flex:1;" onclick="stopScrape('${cat.folder}')">
             Stop
           </button>
         ` : `
-          <button class="btn primary sm" style="flex:1;" onclick="triggerScrape('${cat.folder}')">
-            Start Scraper
+          <button class="btn primary sm local-ctl" style="flex:1;" onclick="triggerScrape('${cat.folder}')">
+            Scrape
           </button>
         `}
+        <button class="btn secondary sm local-ctl" onclick="triggerSync('${cat.folder}')" title="Sync ${cat.name} to EC2">
+          ☁️ Sync EC2
+        </button>
+        <button class="btn secondary sm" onclick="openSources('${cat.folder}')" title="Extra Myntra / Shopify URLs scraped with this category">
+          🔗 Sources
+        </button>
         <button class="btn secondary sm" onclick="openLogs('${cat.folder}')">
           Logs
         </button>
@@ -752,16 +1537,12 @@ function renderCategories(services) {
 }
 
 function renderFallback() {
-  renderCategories(CATEGORIES.map(c => ({
-    folder: c.folder,
-    is_running: false,
-    product_count: "—",
-    latest_log: "Click Start to initiate scrape"
-  })));
+  document.getElementById("categoriesGrid").innerHTML =
+    `<div class="category-card">Could not load category status from the hub server. Retrying…</div>`;
 }
 
 async function triggerScrape(folder, mode = "parallel") {
-  showToast(`Initiating ${folder}…`);
+  showToast(`Initiating scraper for ${folder}…`);
   try {
     const token = getSessionToken();
     const res = await fetch("/api/alan/scrape/start", {
@@ -808,25 +1589,225 @@ async function stopScrape(folder) {
   }
 }
 
+/* ==========================================================
+   EC2 SYNCHRONIZATION CONTROLS
+========================================================== */
+async function triggerSync(folder = "all") {
+  showToast(`Starting EC2 sync for ${folder}…`);
+  try {
+    const token = getSessionToken();
+    const res = await fetch("/api/alan/sync/ec2", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+      },
+      body: JSON.stringify({ folder })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(`EC2 Sync started for ${folder}`);
+      openSyncModal(folder);
+    } else {
+      showToast(`Sync Error: ${data.error || 'Failed to trigger sync'}`);
+      if (res.status === 409) {
+        openSyncModal(data.folder || folder);
+      }
+    }
+  } catch (e) {
+    showToast(`Network error: ${e.message}`);
+  }
+}
+
+function openSyncModal(folder) {
+  isSyncModal = true;
+  activeFolder = null;
+  document.getElementById("modalTitle").innerHTML = `☁️ Sync to EC2: <b>${escapeHtml(folder.toUpperCase())}</b> <span id="syncProgressPill" style="font-size:12px;padding:3px 8px;border-radius:12px;background:#000;color:#fff;margin-left:8px;">RUNNING...</span>`;
+  document.getElementById("stopSyncBtn").style.display = "inline-flex";
+  document.getElementById("logModal").classList.add("open");
+  document.getElementById("modalLogBody").innerText = "Initializing live EC2 sync pipeline…";
+
+  clearInterval(pollTimer);
+  clearInterval(syncPollTimer);
+  pollSyncLog();
+  syncPollTimer = setInterval(pollSyncLog, 1200);
+}
+
+async function pollSyncLog() {
+  if (!isSyncModal) return;
+  try {
+    const token = getSessionToken();
+    const res = await fetch(`/api/alan/sync/ec2/status?auth_token=${encodeURIComponent(token)}`);
+    const data = await res.json();
+    const body = document.getElementById("modalLogBody");
+    const pill = document.getElementById("syncProgressPill");
+
+    if (data.lines && data.lines.length) {
+      body.innerHTML = data.lines.map(formatLog).join("\n");
+      if (autoScroll) {
+        body.scrollTop = body.scrollHeight;
+      }
+    }
+
+    if (data.running) {
+      if (pill) pill.innerHTML = `RUNNING (${data.elapsed}s)`;
+      document.getElementById("pipelineMetricVal").innerText = `Syncing (${data.elapsed}s)`;
+      document.getElementById("pipelineMetricSub").innerText = `Target: ${data.folder}`;
+    } else {
+      const isSuccess = data.exit_code === 0;
+      if (pill) {
+        pill.innerHTML = isSuccess ? `COMPLETED ✅ (${data.elapsed}s)` : `FAILED ❌ (exit ${data.exit_code})`;
+        pill.style.background = isSuccess ? '#059669' : '#dc2626';
+      }
+      document.getElementById("pipelineMetricVal").innerText = isSuccess ? `Synced ✅` : `Sync Failed`;
+      document.getElementById("pipelineMetricSub").innerText = `Last run took ${data.elapsed}s`;
+      document.getElementById("stopSyncBtn").style.display = "none";
+      // Finished: one last render is enough, stop polling.
+      clearInterval(syncPollTimer);
+    }
+  } catch (e) {
+    console.error("EC2 Sync poll error", e);
+  }
+}
+
+async function stopSync() {
+  showToast("Stopping EC2 sync process…");
+  try {
+    const token = getSessionToken();
+    const res = await fetch("/api/alan/sync/ec2/stop", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+      }
+    });
+    const data = await res.json();
+    showToast(data.status === "stopped" ? "Sync stopped" : "Sync not running");
+  } catch (e) {
+    showToast(`Error stopping sync: ${e.message}`);
+  }
+}
+
+/* ==========================================================
+   SOURCES — extra Myntra / Shopify URLs per category
+========================================================== */
+let sourcesFolder = null;
+let sourcesPollTimer = null;
+const SOURCE_KIND_LABEL = {
+  myntra_product: "Myntra product", myntra_listing: "Myntra listing", shopify: "Shopify", invalid: "Invalid",
+};
+
+async function sourcesApi(path, body) {
+  const token = getSessionToken();
+  const res = await fetch(`/api/alan/sources/${encodeURIComponent(sourcesFolder)}${path}`, body === undefined
+    ? { headers: { "Authorization": token ? `Bearer ${token}` : "" } }
+    : { method: "POST", headers: { "Content-Type": "application/json", "Authorization": token ? `Bearer ${token}` : "" }, body: JSON.stringify(body) });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || data.detail || `HTTP ${res.status}`);
+  return data;
+}
+
+async function openSources(folder) {
+  sourcesFolder = folder;
+  document.getElementById("sourcesTitle").innerHTML = `🔗 Sources: <b>${escapeHtml(folder)}</b>`;
+  document.getElementById("sourcesMsg").textContent = "";
+  document.getElementById("sourcesInput").value = "";
+  document.getElementById("sourcesModal").classList.add("open");
+  applyControlsState();
+  await refreshSources();
+  await pollSourcesLog();
+}
+
+function closeSources() {
+  document.getElementById("sourcesModal").classList.remove("open");
+  clearInterval(sourcesPollTimer);
+  sourcesFolder = null;
+}
+
+async function refreshSources() {
+  const box = document.getElementById("sourcesList");
+  try {
+    const d = await sourcesApi("");
+    box.innerHTML = d.urls.length ? d.urls.map(u => `
+      <div style="display:flex; gap:8px; align-items:center; padding:6px 0; border-bottom:1px solid #f1f5f9;">
+        <span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:999px; background:${u.kind === "shopify" ? "#ecfdf5; color:#047857" : u.kind === "invalid" ? "#fef2f2; color:#b91c1c" : "#eff6ff; color:#1d4ed8"};">${escapeHtml(SOURCE_KIND_LABEL[u.kind] || u.kind)}</span>
+        <a href="${escapeHtml(u.url)}" target="_blank" rel="noopener" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#0f172a;">${escapeHtml(u.url)}</a>
+        <span style="color:#94a3b8;">${escapeHtml(u.added_at || "")}</span>
+        <button class="btn secondary sm local-ctl" onclick='removeSource(${escapeHtml(JSON.stringify(u.url))})'>✕</button>
+      </div>`).join("") : `<div style="color:var(--ink-secondary);">No links saved for this category yet.</div>`;
+    document.getElementById("sourcesScrapeBtn").disabled = !controlsAllowed || !d.urls.length || d.running;
+    applyControlsState();
+    if (d.running) document.getElementById("sourcesScrapeBtn").disabled = true;
+  } catch (e) {
+    box.innerHTML = `<div style="color:#b91c1c;">Could not load sources: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+async function addSources() {
+  const msg = document.getElementById("sourcesMsg");
+  try {
+    const d = await sourcesApi("", { urls: document.getElementById("sourcesInput").value });
+    msg.textContent = `Added ${d.added}` + (d.rejected.length ? ` · ${d.rejected.length} rejected: ${d.rejected.map(r => r.url).join(", ")}` : "");
+    document.getElementById("sourcesInput").value = "";
+    await refreshSources();
+  } catch (e) { msg.textContent = `Error: ${e.message}`; }
+}
+
+async function removeSource(url) {
+  try { await sourcesApi("/remove", { url }); await refreshSources(); }
+  catch (e) { document.getElementById("sourcesMsg").textContent = `Error: ${e.message}`; }
+}
+
+async function scrapeSourcesNow() {
+  const msg = document.getElementById("sourcesMsg");
+  try {
+    await sourcesApi("/scrape", {});
+    msg.textContent = "Scrape started…";
+    clearInterval(sourcesPollTimer);
+    sourcesPollTimer = setInterval(pollSourcesLog, 2000);
+    await refreshSources();
+  } catch (e) { msg.textContent = `Error: ${e.message}`; }
+}
+
+async function pollSourcesLog() {
+  if (!sourcesFolder) return;
+  try {
+    const d = await sourcesApi("/log");
+    const body = document.getElementById("sourcesLog");
+    const lines = (d.lines || []).filter(l => l.startsWith("[sources]") || l.startsWith("=====") || /Error|error/.test(l));
+    body.innerHTML = lines.length ? lines.map(formatLog).join("\n") : "No runs yet.";
+    body.scrollTop = body.scrollHeight;
+    if (!d.running) {
+      clearInterval(sourcesPollTimer);
+      document.getElementById("sourcesScrapeBtn").disabled = !controlsAllowed;
+    }
+  } catch (e) { clearInterval(sourcesPollTimer); }
+}
+
 async function openLogs(folder) {
+  isSyncModal = false;
   activeFolder = folder;
   document.getElementById("modalTitle").innerText = `${folder} Scraper Logs`;
+  document.getElementById("stopSyncBtn").style.display = "none";
   document.getElementById("logModal").classList.add("open");
   document.getElementById("modalLogBody").innerText = "Loading log stream…";
 
   await fetchLogs();
   clearInterval(pollTimer);
+  clearInterval(syncPollTimer);
   pollTimer = setInterval(fetchLogs, 1500);
 }
 
 function closeLogModal() {
   document.getElementById("logModal").classList.remove("open");
   activeFolder = null;
+  isSyncModal = false;
   clearInterval(pollTimer);
+  clearInterval(syncPollTimer);
 }
 
 async function fetchLogs() {
-  if (!activeFolder) return;
+  if (!activeFolder || isSyncModal) return;
   try {
     const token = getSessionToken();
     const res = await fetch(`/api/alan/logs/${encodeURIComponent(activeFolder)}?lines=120&auth_token=${encodeURIComponent(token)}`);
@@ -847,7 +1828,7 @@ async function fetchLogs() {
 
 function formatLog(line) {
   const clean = escapeHtml(line);
-  if (line.includes("ERROR") || line.includes("✗") || line.includes("Failed")) {
+  if (line.includes("ERROR") || line.includes("✗") || line.includes("Failed") || line.includes("EC2_FAIL")) {
     return `<div class="log-entry error">${clean}</div>`;
   }
   if (line.includes("WARNING") || line.includes("⚠")) {
@@ -865,6 +1846,529 @@ function copyLogs() {
   const text = document.getElementById("modalLogBody").innerText;
   navigator.clipboard.writeText(text);
   showToast("Logs copied to clipboard");
+}
+
+function handleRefresh() {
+  if (currentConsoleTab === 'scrapers') {
+    fetchStatus(true);
+  } else {
+    loadSidebarConfigAdmin(true);
+  }
+}
+
+/* ==========================================================
+   CONSOLE TAB SWITCHING
+========================================================== */
+let currentConsoleTab = 'scrapers';
+
+function switchConsoleTab(tabName) {
+  currentConsoleTab = tabName;
+  document.querySelectorAll('.console-tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.section-panel').forEach(sec => sec.classList.remove('active'));
+
+  if (tabName === 'scrapers') {
+    document.getElementById('tabScrapersBtn').classList.add('active');
+    document.getElementById('scrapersSection').classList.add('active');
+  } else {
+    document.getElementById('tabSidebarBtn').classList.add('active');
+    document.getElementById('sidebarManagerSection').classList.add('active');
+    loadSidebarConfigAdmin();
+  }
+}
+
+/* ==========================================================
+   SIDEBAR & NAVIGATION MANAGER LOGIC
+========================================================== */
+const NAV_ITEMS_METADATA = [
+  { key: 'dashboard', label: 'Dashboard', icon: '📊', category: 'Overview', desc: 'Main executive summary & core KPIs' },
+  { key: 'demand-radar', label: 'Demand Radar', icon: '🎯', category: 'Intelligence', desc: 'Out-of-stock & competitor demand tracker' },
+  { key: 'demand-radar-beta', label: 'Demand Radar (Beta)', icon: '🎯', category: 'Intelligence', desc: 'Streamlined Demand Radar beta view' },
+  { key: 'comparator', label: 'Brand Comparator', icon: '⚔️', category: 'Intelligence', desc: 'Side-by-side brand metrics showdown' },
+  { key: 'price-intel', label: 'Price Intelligence', icon: '🏷️', category: 'Intelligence', desc: 'Price distribution & discount elasticity' },
+  { key: 'revenue-intel', label: 'Revenue Intelligence', icon: '💰', category: 'Intelligence', desc: 'Estimated GMV & top revenue drivers' },
+  { key: 'colors', label: 'Color Intelligence', icon: '🎨', category: 'Intelligence', desc: 'Colorway analytics & shade trends' },
+  { key: 'fabric', label: 'Fabric Intelligence', icon: '🧵', category: 'Intelligence', desc: 'Fabric composition & blend dynamics' },
+  { key: 'catalog', label: 'Product Catalog', icon: '📦', category: 'Catalog', desc: 'Full SKU inventory table with filters' },
+  { key: 'brands', label: 'Brands Intelligence', icon: '🏢', category: 'Intelligence', desc: 'Brand-level share & market penetration' },
+  { key: 'compare', label: 'Compare Products', icon: '⚖️', category: 'Catalog', desc: 'Product-vs-product detail comparison' },
+  { key: 'category-analysis', label: 'Category Analysis', icon: '🌐', category: 'Intelligence', desc: 'Category-level breakdown & trends' },
+  { key: 'insights', label: 'Trend Intel', icon: '📈', category: 'Analytics', desc: 'Deep trend signals & movement curves' },
+  { key: 'daily-movement', label: 'Market Moves', icon: '⚡', category: 'Analytics', desc: 'Day-over-day price & discount changes' },
+  { key: 'analytics-intelligence', label: 'Sales Monitor', icon: '📉', category: 'Analytics', desc: 'Daily rate-of-sale monitor' },
+  { key: 'scraper-logs', label: 'Logs', icon: '📜', category: 'System', desc: 'Raw scraper logs and execution trace' },
+  { key: 'data-issues', label: 'Data Issues', icon: '⚠️', category: 'System', desc: 'Catalog anomaly detection & error flags' },
+  { key: 'ai-assistant', label: 'AI Assistant', icon: '🤖', category: 'System', desc: 'Fashion Copilot & AI analysis drawer' }
+];
+
+let adminSidebarFullConfig = {
+  global: {
+    sidebar_enabled: true,
+    default_collapsed: false,
+    allow_user_toggle: true,
+    show_brand_header: true,
+    show_sync_status: true,
+    show_user_profile: true,
+    show_sub_sidebars: true,
+    default_landing_view: 'dashboard',
+    items: {}
+  },
+  categories: {}
+};
+
+let adminCategoriesList = [];
+let currentSidebarScope = '_global';
+
+async function loadSidebarConfigAdmin(showToastFlag = false) {
+  try {
+    const token = getSessionToken();
+    const res = await fetch(`/api/alan/sidebar-config?auth_token=${encodeURIComponent(token)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.config) {
+      adminSidebarFullConfig = data.config;
+    }
+    if (Array.isArray(data.categories)) {
+      adminCategoriesList = data.categories;
+    }
+    renderScopePills();
+    renderSidebarManagerUI();
+    if (showToastFlag) showToast("Sidebar settings refreshed");
+  } catch (err) {
+    console.error("Error loading sidebar config:", err);
+    showToast("Failed to load sidebar configuration");
+  }
+}
+
+function renderScopePills() {
+  const container = document.getElementById('scopePillsBar');
+  if (!container) return;
+
+  let html = `
+    <button class="scope-pill-btn ${currentSidebarScope === '_global' ? 'active' : ''}" data-scope="_global" onclick="selectSidebarScope('_global')">
+      🌐 Global Default (All Categories)
+    </button>
+  `;
+
+  adminCategoriesList.forEach(cat => {
+    const hasCustom = adminSidebarFullConfig.categories && adminSidebarFullConfig.categories[cat.folder];
+    const isActive = currentSidebarScope === cat.folder;
+    html += `
+      <button class="scope-pill-btn ${isActive ? 'active' : ''}" data-scope="${escapeHtml(cat.folder)}" onclick="selectSidebarScope('${escapeHtml(cat.folder)}')">
+        ${escapeHtml(cat.name)} ${hasCustom ? '• (Custom)' : ''}
+      </button>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function selectSidebarScope(scopeKey) {
+  currentSidebarScope = scopeKey;
+  renderScopePills();
+  renderSidebarManagerUI();
+}
+
+function getActiveScopeConfig() {
+  if (currentSidebarScope === '_global') {
+    if (!adminSidebarFullConfig.global) adminSidebarFullConfig.global = {};
+    if (!adminSidebarFullConfig.global.items) adminSidebarFullConfig.global.items = {};
+    return adminSidebarFullConfig.global;
+  }
+
+  if (!adminSidebarFullConfig.categories) adminSidebarFullConfig.categories = {};
+  if (!adminSidebarFullConfig.categories[currentSidebarScope]) {
+    // Clone global into this category scope
+    adminSidebarFullConfig.categories[currentSidebarScope] = JSON.parse(JSON.stringify(adminSidebarFullConfig.global || {}));
+  }
+  return adminSidebarFullConfig.categories[currentSidebarScope];
+}
+
+function renderSidebarManagerUI() {
+  const cfg = getActiveScopeConfig();
+  const scopeLabel = document.getElementById('scopeActiveLabel');
+  if (scopeLabel) {
+    if (currentSidebarScope === '_global') {
+      scopeLabel.innerText = "Global Default (Applies to all)";
+      scopeLabel.style.background = "var(--bg-subtle)";
+    } else {
+      const cat = adminCategoriesList.find(c => c.folder === currentSidebarScope);
+      scopeLabel.innerText = `Category: ${cat ? cat.name : currentSidebarScope}`;
+      scopeLabel.style.background = "#eff6ff";
+    }
+  }
+
+  // 1. Display Mode
+  let mode = 'visible';
+  if (cfg.sidebar_enabled === false) {
+    mode = 'hidden';
+  } else if (cfg.default_collapsed) {
+    mode = 'collapsed';
+  }
+  updateDisplayModeUI(mode);
+
+  // 2. Master Checkboxes
+  document.getElementById('cfgAllowUserToggle').checked = cfg.allow_user_toggle !== false;
+  document.getElementById('cfgShowBrandHeader').checked = cfg.show_brand_header !== false;
+  document.getElementById('cfgShowSyncStatus').checked = cfg.show_sync_status !== false;
+  document.getElementById('cfgShowUserProfile').checked = cfg.show_user_profile !== false;
+  document.getElementById('cfgShowSubSidebars').checked = cfg.show_sub_sidebars !== false;
+
+  // 3. Default Landing Dropdown
+  const select = document.getElementById('cfgDefaultLandingSelect');
+  if (select) {
+    select.innerHTML = NAV_ITEMS_METADATA.map(item => `
+      <option value="${item.key}" ${cfg.default_landing_view === item.key ? 'selected' : ''}>${item.icon} ${item.label}</option>
+    `).join("");
+  }
+
+  // 4. Render 17 Navigation Cards
+  renderNavItemsGrid(cfg);
+
+  // 5. Render Miniature Live Preview
+  updateLivePreview();
+}
+
+function updateDisplayModeUI(mode) {
+  document.querySelectorAll('.display-mode-card').forEach(c => c.classList.remove('active'));
+  if (mode === 'collapsed') {
+    document.getElementById('modeCardCollapsed').classList.add('active');
+  } else if (mode === 'hidden') {
+    document.getElementById('modeCardHidden').classList.add('active');
+  } else {
+    document.getElementById('modeCardVisible').classList.add('active');
+  }
+}
+
+function setDisplayMode(mode) {
+  const cfg = getActiveScopeConfig();
+  if (mode === 'hidden') {
+    cfg.sidebar_enabled = false;
+    cfg.default_collapsed = false;
+  } else if (mode === 'collapsed') {
+    cfg.sidebar_enabled = true;
+    cfg.default_collapsed = true;
+  } else {
+    cfg.sidebar_enabled = true;
+    cfg.default_collapsed = false;
+  }
+  updateDisplayModeUI(mode);
+  updateLivePreview();
+}
+
+function onSidebarConfigFieldChange() {
+  const cfg = getActiveScopeConfig();
+  cfg.allow_user_toggle = document.getElementById('cfgAllowUserToggle').checked;
+  cfg.show_brand_header = document.getElementById('cfgShowBrandHeader').checked;
+  cfg.show_sync_status = document.getElementById('cfgShowSyncStatus').checked;
+  cfg.show_user_profile = document.getElementById('cfgShowUserProfile').checked;
+  cfg.show_sub_sidebars = document.getElementById('cfgShowSubSidebars').checked;
+  cfg.default_landing_view = document.getElementById('cfgDefaultLandingSelect').value;
+  updateLivePreview();
+}
+
+let currentNavSearchQuery = '';
+let currentNavGroupFilter = 'all';
+let simulatedPreviewActiveItem = null;
+
+function onNavItemSearchChange(query) {
+  currentNavSearchQuery = (query || '').toLowerCase().trim();
+  const cfg = getActiveScopeConfig();
+  renderNavItemsGrid(cfg);
+}
+
+function setNavGroupFilter(group, btn) {
+  currentNavGroupFilter = group;
+  if (btn && btn.parentElement) {
+    btn.parentElement.querySelectorAll('.scope-pill-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  const cfg = getActiveScopeConfig();
+  renderNavItemsGrid(cfg);
+}
+
+function togglePreviewCollapse() {
+  const cfg = getActiveScopeConfig();
+  cfg.default_collapsed = !cfg.default_collapsed;
+  if (cfg.sidebar_enabled === false) cfg.sidebar_enabled = true;
+  updateDisplayModeUI(cfg.default_collapsed ? 'collapsed' : 'visible');
+  updateLivePreview();
+}
+
+function previewSetActiveItem(key) {
+  simulatedPreviewActiveItem = key;
+  updateLivePreview();
+  showToast(`Simulated active view: ${key}`);
+}
+
+function renderNavItemsGrid(cfg) {
+  const grid = document.getElementById('navItemsManageGrid');
+  if (!grid) return;
+
+  if (!cfg.items) cfg.items = {};
+
+  const filteredItems = NAV_ITEMS_METADATA.filter(meta => {
+    // 1. Group filter
+    if (currentNavGroupFilter !== 'all' && meta.category !== currentNavGroupFilter) {
+      return false;
+    }
+    // 2. Search query filter
+    if (currentNavSearchQuery) {
+      const labelVal = (cfg.items[meta.key]?.label || meta.label).toLowerCase();
+      const match = labelVal.includes(currentNavSearchQuery) || 
+                    meta.key.includes(currentNavSearchQuery) || 
+                    meta.category.toLowerCase().includes(currentNavSearchQuery) ||
+                    meta.desc.toLowerCase().includes(currentNavSearchQuery);
+      if (!match) return false;
+    }
+    return true;
+  });
+
+  if (filteredItems.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 36px 20px; color: var(--ink-secondary);">
+        No navigation modules match "<b>${escapeHtml(currentNavSearchQuery)}</b>" in category <b>${escapeHtml(currentNavGroupFilter)}</b>.
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = filteredItems.map(meta => {
+    const itemCfg = cfg.items[meta.key] || { enabled: true, label: meta.label };
+    const isEnabled = itemCfg.enabled !== false;
+    const labelVal = itemCfg.label || meta.label;
+    const isLanding = (cfg.default_landing_view || 'dashboard') === meta.key;
+
+    return `
+      <div class="nav-item-manage-card ${isEnabled ? '' : 'item-disabled'}" id="card-nav-${meta.key}">
+        <div class="nav-item-manage-header">
+          <div class="nav-item-meta">
+            <div class="nav-item-icon-box">${meta.icon}</div>
+            <div class="nav-item-title-box">
+              <span class="nav-item-name">${escapeHtml(labelVal)}</span>
+              <span class="nav-item-category-tag">${meta.category} • #${meta.key}</span>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-item-${meta.key}" ${isEnabled ? 'checked' : ''} onchange="onNavItemToggle('${meta.key}', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="nav-item-edit-row">
+          <input type="text" class="nav-item-edit-input" value="${escapeHtml(labelVal)}" placeholder="Custom label..." oninput="onNavItemLabelChange('${meta.key}', this.value)">
+          <button class="landing-badge-btn ${isLanding ? 'is-landing' : ''}" title="Set as default landing tab" onclick="setDefaultLanding('${meta.key}')">
+            ${isLanding ? '★ Landing' : '☆ Make Landing'}
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function onNavItemToggle(key, isChecked) {
+  const cfg = getActiveScopeConfig();
+  if (!cfg.items) cfg.items = {};
+  if (!cfg.items[key]) cfg.items[key] = { label: key };
+  cfg.items[key].enabled = isChecked;
+
+  const card = document.getElementById(`card-nav-${key}`);
+  if (card) {
+    if (isChecked) card.classList.remove('item-disabled');
+    else card.classList.add('item-disabled');
+  }
+
+  updateLivePreview();
+}
+
+function onNavItemLabelChange(key, newLabel) {
+  const cfg = getActiveScopeConfig();
+  if (!cfg.items) cfg.items = {};
+  if (!cfg.items[key]) cfg.items[key] = { enabled: true };
+  cfg.items[key].label = newLabel.trim() || undefined;
+  
+  const cardName = document.querySelector(`#card-nav-${key} .nav-item-name`);
+  if (cardName) cardName.innerText = newLabel.trim() || NAV_ITEMS_METADATA.find(m => m.key === key)?.label || key;
+
+  updateLivePreview();
+}
+
+function setDefaultLanding(key) {
+  const cfg = getActiveScopeConfig();
+  cfg.default_landing_view = key;
+  const select = document.getElementById('cfgDefaultLandingSelect');
+  if (select) select.value = key;
+  renderNavItemsGrid(cfg);
+  updateLivePreview();
+  showToast(`Default landing view set to: ${key}`);
+}
+
+function applyPreset(presetName) {
+  const cfg = getActiveScopeConfig();
+  if (!cfg.items) cfg.items = {};
+
+  const allowedSets = {
+    all_on: NAV_ITEMS_METADATA.map(m => m.key),
+    executive: ['dashboard', 'demand-radar', 'comparator', 'price-intel', 'revenue-intel', 'analytics-intelligence', 'insights'],
+    merchandising: ['dashboard', 'catalog', 'compare', 'brands', 'colors', 'fabric', 'category-analysis', 'daily-movement'],
+    system_ops: ['dashboard', 'scraper-logs', 'data-issues', 'ai-assistant'],
+    minimal: ['dashboard', 'catalog', 'demand-radar']
+  };
+
+  const allowed = new Set(allowedSets[presetName] || allowedSets.all_on);
+
+  NAV_ITEMS_METADATA.forEach(meta => {
+    if (!cfg.items[meta.key]) cfg.items[meta.key] = { label: meta.label };
+    cfg.items[meta.key].enabled = allowed.has(meta.key);
+  });
+
+  renderNavItemsGrid(cfg);
+  updateLivePreview();
+  showToast(`Applied preset: ${presetName.replace('_', ' ').toUpperCase()}`);
+}
+
+function updateLivePreview() {
+  const cfg = getActiveScopeConfig();
+  const container = document.getElementById('previewSidebarContainer');
+  const badge = document.getElementById('previewModeBadge');
+  if (!container || !badge) return;
+
+  if (cfg.sidebar_enabled === false) {
+    badge.innerText = "HIDDEN";
+    badge.style.background = "#dc2626";
+    container.innerHTML = `
+      <div style="text-align:center; padding:60px 20px; color:var(--ink-secondary);">
+        <div style="font-size:32px; margin-bottom:8px;">🚫</div>
+        <div style="font-weight:700; color:var(--ink); font-size:14px; margin-bottom:4px;">Sidebar is Hidden</div>
+        <div style="font-size:12px;">The category dashboard will display full-viewport content without a left sidebar.</div>
+        ${cfg.allow_user_toggle !== false ? '<div style="font-size:11px; margin-top:12px; color:#2563eb; font-weight:600;">✓ Top toggle button enabled for users</div>' : '<div style="font-size:11px; margin-top:12px; color:#94a3b8;">User toggle is disabled</div>'}
+      </div>
+    `;
+    return;
+  }
+
+  const isCollapsed = Boolean(cfg.default_collapsed);
+  badge.innerText = isCollapsed ? "COLLAPSED (82px)" : "EXPANDED (250px)";
+  badge.style.background = isCollapsed ? "#475569" : "#000000";
+
+  let html = "";
+
+  // Brand Header
+  if (cfg.show_brand_header !== false) {
+    html += `
+      <div class="preview-brand" style="${isCollapsed ? 'align-items:center; text-align:center;' : ''}">
+        <div style="display:flex; align-items:center; gap:8px; ${isCollapsed ? 'justify-content:center;' : ''}">
+          <img src="https://launchpad.lal10.com/logo.png" alt="LAL10" style="height:18px; width:auto; max-width:${isCollapsed ? '32px' : '55px'}; object-fit:contain;" />
+          ${!isCollapsed ? `
+            <span style="width:1px; height:14px; background:#cbd5e1; display:inline-block;"></span>
+            <img src="https://thefashionos.com/assets/logo-Dl4_z_fN.png" alt="FashionOS" style="height:16px; width:auto; max-width:55px; object-fit:contain;" />
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  // Active View calculation
+  const activeView = simulatedPreviewActiveItem || cfg.default_landing_view || 'dashboard';
+
+  // Nav Items
+  NAV_ITEMS_METADATA.forEach(meta => {
+    const itemCfg = (cfg.items && cfg.items[meta.key]) || { enabled: true };
+    if (itemCfg.enabled === false) return; // Skip hidden items
+
+    const label = itemCfg.label || meta.label;
+    const isActive = activeView === meta.key;
+
+    html += `
+      <div class="preview-item ${isActive ? 'active' : ''}" onclick="previewSetActiveItem('${meta.key}')" style="${isCollapsed ? 'justify-content:center;' : ''}; cursor:pointer;" title="${escapeHtml(label)} (Click to simulate active tab)">
+        <span class="preview-item-icon">${meta.icon}</span>
+        ${!isCollapsed ? `<span>${escapeHtml(label)}</span>` : ''}
+      </div>
+    `;
+  });
+
+  // Sync Status
+  if (cfg.show_sync_status !== false && !isCollapsed) {
+    html += `
+      <div class="preview-status">
+        <span style="width:6px; height:6px; border-radius:50%; background:#10b981;"></span>
+        <span>Myntra Live Sync</span>
+      </div>
+    `;
+  }
+
+  // Profile Footer
+  if (cfg.show_user_profile !== false) {
+    html += `
+      <div class="preview-footer" style="${isCollapsed ? 'justify-content:center;' : ''}">
+        <div class="preview-avatar">FO</div>
+        ${!isCollapsed ? `
+          <div style="display:flex; flex-direction:column; font-size:11px;">
+            <strong>FashionOS User</strong>
+            <span style="color:#64748b; font-size:10px;">Admin</span>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+async function saveSidebarConfigAdmin() {
+  const btn = document.getElementById('saveSidebarBtn');
+  if (btn) btn.innerText = "Saving…";
+
+  try {
+    const token = getSessionToken();
+    const res = await fetch("/api/alan/sidebar-config", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+      },
+      body: JSON.stringify({ config: adminSidebarFullConfig })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast("Sidebar configuration successfully saved!");
+      // Broadcast live sync event to other open tabs
+      try {
+        localStorage.setItem('lal10_sidebar_config_timestamp', String(Date.now()));
+        localStorage.setItem('lal10_sidebar_config', JSON.stringify(adminSidebarFullConfig.global));
+      } catch(e) {}
+      loadSidebarConfigAdmin();
+    } else {
+      showToast(`Error saving: ${data.error || 'Failed'}`);
+    }
+  } catch (err) {
+    showToast(`Network error: ${err.message}`);
+  } finally {
+    if (btn) btn.innerText = "💾 Save Sidebar Settings";
+  }
+}
+
+async function resetSidebarConfigAdmin() {
+  if (!confirm("Are you sure you want to reset all sidebar and navigation options to default?")) return;
+
+  try {
+    const token = getSessionToken();
+    const res = await fetch("/api/alan/sidebar-config/reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : ""
+      }
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast("Sidebar configuration reset to defaults");
+      loadSidebarConfigAdmin();
+    } else {
+      showToast(`Error resetting: ${data.error || 'Failed'}`);
+    }
+  } catch (err) {
+    showToast(`Network error: ${err.message}`);
+  }
 }
 
 function escapeHtml(str) {

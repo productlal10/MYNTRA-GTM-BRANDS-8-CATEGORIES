@@ -10,31 +10,29 @@ Usage:
 """
 
 import os
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+except ImportError:
+    pass
 import sys
 import subprocess
 import argparse
 from pathlib import Path
 
 # ─── Service → DB mapping ───────────────────────────────────────────────────
-SERVICES = [
-    {"name": "Activewear",   "folder": "ACTIVEWEAR",   "port": 3008, "db": "activewear_myntra_data"},
-    {"name": "Polo",         "folder": "POLOS",         "port": 3009, "db": "polos_myntra_data"},
-    {"name": "Kids",         "folder": "Kids",          "port": 3010, "db": "kids_gtm"},
-    {"name": "Shirts",       "folder": "Shirts",        "port": 3011, "db": "gtm_shirts_myntra"},
-    {"name": "Westernwear",  "folder": "Westerwear",    "port": 3012, "db": "westernwear_gtm"},
-    {"name": "Innerwear",    "folder": "Hosiery",       "port": 3013, "db": "hosiery_gtm"},
-    {"name": "Occasionwear", "folder": "Ocassionwear",  "port": 3014, "db": "ocassionwear_gtm"},
-    {"name": "Women Ethnic", "folder": "WOMEN ETHNIC",  "port": 3015, "db": "women_ethnic_myntra_data"},
-    {"name": "Special",      "folder": "SPECIAL",       "port": 3019, "db": "ghanshaym_special"},
-    {"name": "Maneet",       "folder": "Maneet",        "port": 3020, "db": "maneet_brands_shirts"},
-]
+# Defined once in categories.json (see categories.py).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from categories import load_categories
+SERVICES = load_categories()
 
 BASE_DIR = Path(__file__).resolve().parent
 
 PG_HOST     = os.getenv("PG_HOST", "127.0.0.1")
 PG_PORT     = int(os.getenv("PG_PORT", 5432))
 PG_USER     = os.getenv("PG_USER", "postgres")
-PG_PASSWORD = os.getenv("PG_PASSWORD", "alan1234")
+PG_PASSWORD = os.getenv("PG_PASSWORD", "")
 
 GREEN  = "\033[0;32m"
 RED    = "\033[0;31m"

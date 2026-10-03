@@ -1,0 +1,130 @@
+{
+  "_comment": "Sidebar and navigation management configuration. Managed via /alan Admin Console.",
+  "global": {
+    "sidebar_enabled": true,
+    "default_collapsed": false,
+    "allow_user_toggle": true,
+    "show_brand_header": true,
+    "show_sync_status": true,
+    "show_user_profile": true,
+    "show_sub_sidebars": true,
+    "default_landing_view": "dashboard",
+    "items": {
+      "dashboard": {
+        "enabled": true,
+        "label": "Dashboard",
+        "order": 1,
+        "category": "Overview"
+      },
+      "demand-radar": {
+        "enabled": true,
+        "label": "Demand Radar",
+        "order": 2,
+        "category": "Intelligence"
+      },
+      "demand-radar-beta": {
+        "enabled": true,
+        "label": "Demand Radar (Beta)",
+        "order": 3,
+        "category": "Intelligence"
+      },
+      "ros-intelligence": {
+        "enabled": true,
+        "label": "RoS Intelligence",
+        "order": 4,
+        "category": "Intelligence"
+      },
+      "comparator": {
+        "enabled": true,
+        "label": "Brand Comparator",
+        "order": 5,
+        "category": "Intelligence"
+      },
+      "price-intel": {
+        "enabled": true,
+        "label": "Price Intelligence",
+        "order": 5,
+        "category": "Intelligence"
+      },
+      "revenue-intel": {
+        "enabled": true,
+        "label": "Revenue Intelligence",
+        "order": 6,
+        "category": "Intelligence"
+      },
+      "colors": {
+        "enabled": true,
+        "label": "Color Intelligence",
+        "order": 7,
+        "category": "Intelligence"
+      },
+      "fabric": {
+        "enabled": true,
+        "label": "Fabric Intelligence",
+        "order": 8,
+        "category": "Intelligence"
+      },
+      "catalog": {
+        "enabled": true,
+        "label": "Product Catalog",
+        "order": 9,
+        "category": "Catalog"
+      },
+      "brands": {
+        "enabled": true,
+        "label": "Brands Intelligence",
+        "order": 10,
+        "category": "Intelligence"
+      },
+      "compare": {
+        "enabled": true,
+        "label": "Compare Products",
+        "order": 11,
+        "category": "Catalog"
+      },
+      "category-analysis": {
+        "enabled": true,
+        "label": "Category Analysis",
+        "order": 12,
+        "category": "Intelligence"
+      },
+      "insights": {
+        "enabled": true,
+        "label": "Trend Intel",
+        "order": 13,
+        "category": "Analytics"
+      },
+      "daily-movement": {
+        "enabled": true,
+        "label": "Market Moves",
+        "order": 14,
+        "category": "Analytics"
+      },
+      "analytics-intelligence": {
+        "enabled": true,
+        "label": "Sales Monitor",
+        "order": 15,
+        "category": "Analytics"
+      },
+      "scraper-logs": {
+        "enabled": true,
+        "label": "Logs",
+        "order": 16,
+        "category": "System"
+      },
+      "data-issues": {
+        "enabled": true,
+        "label": "Data Issues",
+        "order": 17,
+        "category": "System"
+      },
+      "ai-assistant": {
+        "enabled": true,
+        "label": "AI Assistant",
+        "order": 18,
+        "category": "System"
+      }
+    }
+  },
+  "categories": {}
+}

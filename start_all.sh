@@ -15,18 +15,10 @@ else
 fi
 
 # ─── SERVICE DEFINITIONS ─── (name, folder, port)
-declare -a SERVICES=(
-  "Activewear|ACTIVEWEAR|3008"
-  "Polo|POLOS|3009"
-  "Kids|Kids|3010"
-  "Shirts|Shirts|3011"
-  "Westernwear|Westerwear|3012"
-  "Innerwear|Hosiery|3013"
-  "Occasionwear|Ocassionwear|3014"
-  "Women Ethnic|WOMEN ETHNIC|3015"
-  "Special Arrow X USpolo|SPECIAL|3019"
-  "Maneet|Maneet|3020"
-)
+# Defined once in categories.json (see categories.py).
+SERVICES=()
+while IFS= read -r line; do SERVICES+=("$line"); done < <("$PYTHON" "$SCRIPT_DIR/categories.py" '{name}|{folder}|{port}')
+[[ ${#SERVICES[@]} -gt 0 ]] || { echo "No categories loaded from $SCRIPT_DIR/categories.json" >&2; exit 1; }
 
 HUB_PORT=3000
 
@@ -100,7 +92,7 @@ for cmd in psql /usr/local/bin/psql /opt/homebrew/bin/psql; do
 done
 
 if [ -f "$SCRIPT_DIR/setup_databases.py" ]; then
-  PGPASSWORD="${PGPASSWORD:-alan1234}" "$PYTHON" "$SCRIPT_DIR/setup_databases.py" 2>/dev/null && ok "Databases verified & ready" || warn "Database check finished (verify PostgreSQL is running)"
+  PGPASSWORD="${PGPASSWORD:-$(sed -n "s/^PG_PASSWORD=//p" "$SCRIPT_DIR/.env" | head -1)}" "$PYTHON" "$SCRIPT_DIR/setup_databases.py" 2>/dev/null && ok "Databases verified & ready" || warn "Database check finished (verify PostgreSQL is running)"
 else
   warn "setup_databases.py not found — skipping automated DB check."
 fi

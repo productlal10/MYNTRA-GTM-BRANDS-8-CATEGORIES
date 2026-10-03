@@ -39,23 +39,15 @@ acquire_lock() {
   trap 'rm -f "$LOCK_FILE"' EXIT
 }
 
-# ─── 10 CATEGORY SCRAPERS: "FOLDER|DB_NAME|PORT|LABEL" ──────────────────────
-declare -a CATEGORIES=(
-  "Maneet|maneet_brands_shirts|3020|Maneet"
-  "SPECIAL|ghanshaym_special|3019|Special Arrow X USpolo"
-  "Shirts|gtm_shirts_myntra|3011|Shirts"
-  "POLOS|polos_myntra_data|3009|Polo"
-  "ACTIVEWEAR|activewear_myntra_data|3008|Activewear"
-  "Kids|kids_gtm|3010|Kidswear"
-  "Westerwear|westernwear_gtm|3012|Westernwear"
-  "Hosiery|hosiery_gtm|3013|Innerwear"
-  "Ocassionwear|ocassionwear_gtm|3014|Occasionwear"
-  "WOMEN ETHNIC|women_ethnic_myntra_data|3015|Women Ethnic"
-)
+# ─── CATEGORY SCRAPERS: "FOLDER|DB_NAME|PORT|LABEL" ─────────────────────────
+# Defined once in categories.json (see categories.py).
+CATEGORIES=()
+while IFS= read -r line; do CATEGORIES+=("$line"); done < <("$PYTHON" "$BASE_DIR/categories.py" '{folder}|{db}|{port}|{name}')
+[[ ${#CATEGORIES[@]} -gt 0 ]] || { echo "No categories loaded from $BASE_DIR/categories.json" >&2; exit 1; }
 
 # ─── COLORS ─────────────────────────────────────────────────────────────────
 GREEN='\033[0;32m'; CYAN='\033[0;36m'; RED='\033[0;31m'
-YELLOW='\033[1;33m'; MAGENTA='\033[0;35m'; BOLD='\033[1m'; NC='\033[0m'
+YELLOW='\033[1;33m'; MAGENTA='\033[0;35m'; BOLD='\033[1m'; DIM='\033[2m'; NC='\033[0m'
 TICK="${GREEN}✔${NC}"; CROSS="${RED}✗${NC}"; ARROW="${CYAN}➜${NC}"
 
 # ─── HELPERS ────────────────────────────────────────────────────────────────
@@ -108,7 +100,7 @@ fi
 # ─── STATUS ACTION ──────────────────────────────────────────────────────────
 if [[ "${1:-}" == "--status" ]]; then
   echo -e "\n${BOLD}${CYAN}════════════════════════════════════════════════════════════════${NC}"
-  echo -e "${BOLD}  📊  LAL10 Scraper Live Status (All 10 Categories)${NC}"
+  echo -e "${BOLD}  📊  LAL10 Scraper Live Status (All ${#CATEGORIES[@]} Categories)${NC}"
   echo -e "${BOLD}${CYAN}════════════════════════════════════════════════════════════════${NC}\n"
   printf "  ${BOLD}%-24s %-8s %-12s %s${NC}\n" "Category" "Port" "Status" "Latest Log Output"
   printf "  %s\n" "────────────────────────────────────────────────────────────────"
@@ -157,7 +149,7 @@ acquire_lock
 echo ""
 echo -e "${BOLD}${MAGENTA}╔════════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${BOLD}${MAGENTA}║  🚀  LAL10 Fashion Intelligence — Master Scraper Launcher     ║${NC}"
-echo -e "${BOLD}${MAGENTA}║  Mode: PARALLEL | Total Categories: 10                          ║${NC}"
+printf "${BOLD}${MAGENTA}║  Mode: %-10s | Total Categories: %-3s                       ║${NC}\n" "$(echo "$MODE" | tr '[:lower:]' '[:upper:]')" "${#CATEGORIES[@]}"
 echo -e "${BOLD}${MAGENTA}╚════════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -165,6 +157,7 @@ touch "$PIDS_FILE"
 
 # ─── EXECUTION ──────────────────────────────────────────────────────────────
 RUN_COUNT=0
+LAUNCHED=()
 
 for cat in "${CATEGORIES[@]}"; do
   IFS='|' read -r folder db port label <<< "$cat"
@@ -188,6 +181,7 @@ for cat in "${CATEGORIES[@]}"; do
 
   log_file="$LOG_DIR/${folder// /_}_scraper.log"
   RUN_COUNT=$((RUN_COUNT + 1))
+  LAUNCHED+=("$folder")
 
   if [[ "$MODE" == "parallel" ]]; then
     echo -e "  ${ARROW} Launching ${BOLD}$label${NC} scraper in background (Port $port)…"
@@ -223,4 +217,22 @@ if [[ "$MODE" == "parallel" ]]; then
     wait
     echo "[$(date)] All scrapers finished."
   fi
+fi
+
+# ─── PUSH TO EC2 ────────────────────────────────────────────────────────────
+# Scraping only fills the local databases; without this the nightly run never
+# reached production. Unattended (scheduled) runs sync once every scraper has
+# finished; set AUTO_SYNC_EC2=0 in .env (or the environment) to turn it off.
+AUTO_SYNC_EC2="${AUTO_SYNC_EC2:-$(sed -n 's/^AUTO_SYNC_EC2=//p' "$BASE_DIR/.env" 2>/dev/null | head -1)}"
+if [[ "${AUTO_SYNC_EC2:-1}" != "0" && ! -t 1 && "$RUN_COUNT" -gt 0 ]]; then
+  echo "[$(date)] Syncing to EC2…"
+  if [[ -z "$ONLY_CAT" ]]; then
+    bash "$BASE_DIR/pipeline.sh" --sync-only || echo "[$(date)] EC2 sync reported failures — see $BASE_DIR/.pipeline_logs/"
+  else
+    # --only here matches loosely; pipeline.sh needs exact folder names, so sync what actually ran.
+    for f in "${LAUNCHED[@]}"; do
+      bash "$BASE_DIR/pipeline.sh" --sync-only --only "$f" || echo "[$(date)] EC2 sync of $f reported failures — see $BASE_DIR/.pipeline_logs/"
+    done
+  fi
+  echo "[$(date)] EC2 sync step done."
 fi

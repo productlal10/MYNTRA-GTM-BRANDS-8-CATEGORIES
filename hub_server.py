@@ -7,6 +7,7 @@ Serves the unified category hub on port 3000 with Central Authentication SSO.
 import os
 import sys
 import json
+import re
 import time
 import hmac
 import base64
@@ -32,13 +33,44 @@ BASE_DIR = Path(__file__).resolve().parent
 HUB_DIR = BASE_DIR / "HUB"
 
 # ─── Enterprise Authentication Configuration ────────────────────────────────
-ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "fashionos@lal10.com").strip().lower()
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "builtbylal10").strip()
-SECRET_KEY = os.environ.get("SECRET_KEY", "fashionos-myntra-intel-secret-salt-2026").encode("utf-8")
+ENV_FILE = BASE_DIR / ".env"
+
+
+def _env_setting(key: str, default: str = "") -> str:
+    """Read a setting from the environment, falling back to the git-ignored .env file.
+
+    The file is re-read on each call so secrets can be added without restarting the hub.
+    """
+    if os.environ.get(key):
+        return os.environ[key].strip()
+    try:
+        for line in ENV_FILE.read_text("utf-8").splitlines():
+            name, sep, value = line.partition("=")
+            if sep and name.strip() == key:
+                return value.strip().strip("'\"")
+    except OSError:
+        pass
+    return default
+
+
+def _signing_secret() -> bytes:
+    secret = _env_setting("SECRET_KEY")
+    if not secret:
+        # No configured secret: use a random per-process one so tokens can never be forged
+        # from a value published in source control (sessions then last one process lifetime).
+        import secrets as _secrets
+        print("WARNING: SECRET_KEY is not set in .env; using a random per-process signing key.")
+        return _secrets.token_bytes(32)
+    return secret.encode("utf-8")
+
+
+ADMIN_EMAIL = _env_setting("ADMIN_EMAIL", "fashionos@lal10.com").strip().lower()
+ADMIN_PASSWORD = _env_setting("ADMIN_PASSWORD").strip()
+SECRET_KEY = _signing_secret()
 ACTIVE_SESSIONS = set()
 
 def _load_valid_emails():
-    configured = os.environ.get("VALID_EMAILS", "")
+    configured = _env_setting("VALID_EMAILS", "")
     emails = {e.strip().lower() for e in configured.split(",") if e.strip()}
     if ADMIN_EMAIL:
         emails.add(ADMIN_EMAIL)
@@ -104,8 +136,8 @@ def is_valid_token(token: str) -> bool:
         return False
     if token in _revoked_tokens():
         return False
-    if token in ACTIVE_SESSIONS:
-        return True
+    # Always re-check signature, expiry and email: caching a token as valid would let it
+    # outlive its 7 days, or a user removed from VALID_EMAILS, for the life of the process.
     if token.startswith("fash."):
         parts = token.split(".", 3)
         if len(parts) == 4:
@@ -116,11 +148,10 @@ def is_valid_token(token: str) -> bool:
                 email_blob = parts[2]
                 padded = email_blob + "=" * (-len(email_blob) % 4)
                 email = base64.urlsafe_b64decode(padded.encode("ascii")).decode("utf-8").strip().lower()
-                if not email:
+                if not email or email not in VALID_EMAILS:
                     return False
                 expected = hmac.new(SECRET_KEY, f"{email}:{token_ts}".encode("utf-8"), hashlib.sha256).hexdigest()[:32]
                 if hmac.compare_digest(parts[3], expected):
-                    ACTIVE_SESSIONS.add(token)
                     return True
             except Exception:
                 pass
@@ -140,40 +171,11 @@ def get_current_token() -> str:
     return ""
 
 # ─── Service Registry ───────────────────────────────────────────────────────
-# "gender" lists every audience making up at least 5% of that database (boys, girls
-# and unisex kids are grouped as "kids"), as measured on 2026-10-01.
-SERVICES = [
-    {"name": "Activewear",     "port": 3008, "folder": "ACTIVEWEAR",  "db": "activewear_myntra_data",  "slug": "activewear",  "gender": ["men", "women", "kids"]},
-    {"name": "Polo",           "port": 3009, "folder": "POLOS",        "db": "polos_myntra_data",        "slug": "polos",       "gender": ["men", "women"]},
-    {"name": "Kids",           "port": 3010, "folder": "Kids",         "db": "kids_gtm",                 "slug": "kids",        "gender": ["kids"]},
-    {"name": "Shirts",         "port": 3011, "folder": "Shirts",       "db": "gtm_shirts_myntra",        "slug": "shirts",      "gender": ["men", "kids"]},
-    {"name": "Westernwear",    "port": 3012, "folder": "Westerwear",   "db": "westernwear_gtm",          "slug": "westernwear", "gender": ["women", "men", "kids"]},
-    {"name": "Innerwear",      "port": 3013, "folder": "Hosiery",      "db": "hosiery_gtm",              "slug": "innerwear",   "gender": ["women", "kids"]},
-    {"name": "Occasionwear",   "port": 3014, "folder": "Ocassionwear", "db": "ocassionwear_gtm",         "slug": "occasionwear","gender": ["men", "women", "kids"]},
-    {"name": "Women Ethnic",   "port": 3015, "folder": "WOMEN ETHNIC", "db": "women_ethnic_myntra_data", "slug": "ethnic",      "gender": ["women"]},
-    {"name": "Special Arrow X USpolo", "port": 3019, "folder": "SPECIAL",      "db": "ghanshaym_special",        "slug": "special",     "gender": ["men"]},
-    {"name": "Maneet",         "port": 3020, "folder": "Maneet",       "db": "maneet_brands_shirts",     "slug": "maneet",      "gender": ["men", "women"]},
-]
+# Defined once in categories.json (see categories.py), in pipeline order.
+from categories import load_categories
+SERVICES = load_categories()
 
 HUB_PORT = int(os.environ.get("HUB_PORT", 3000))
-ENV_FILE = BASE_DIR / ".env"
-
-
-def _env_setting(key: str, default: str = "") -> str:
-    """Read a setting from the environment, falling back to the git-ignored .env file.
-
-    The file is re-read on each call so secrets can be added without restarting the hub.
-    """
-    if os.environ.get(key):
-        return os.environ[key]
-    try:
-        for line in ENV_FILE.read_text("utf-8").splitlines():
-            name, sep, value = line.partition("=")
-            if sep and name.strip() == key:
-                return value.strip().strip("'\"")
-    except OSError:
-        pass
-    return default
 
 
 def _is_port_alive(port: int, timeout: float = 0.8) -> bool:
@@ -217,7 +219,8 @@ if _FLASK:
         if any(request.path.endswith(ext) for ext in (".js", ".css", ".woff2", ".woff", ".png", ".jpg", ".svg", ".ico")):
             resp.headers["Cache-Control"] = "public, max-age=3600, stale-while-revalidate=86400"
         elif request.path.startswith("/api/intelligence/") or request.path == "/api/services":
-            resp.headers["Cache-Control"] = "public, max-age=5, stale-while-revalidate=15"
+            # These require login, so shared caches must not store them.
+            resp.headers["Cache-Control"] = "private, max-age=5, stale-while-revalidate=15"
 
         # Fast GZIP compression
         accept_encoding = request.headers.get("Accept-Encoding", "")
@@ -245,7 +248,8 @@ if _FLASK:
         path = request.path
         public_paths = {
             "/login", "/api/auth/login", "/api/health", "/favicon.ico",
-            "/api/services", "/api/intelligence/categories"
+            "/api/auth/forgot-password", "/api/auth/social-login",
+            "/api/sidebar-config",
         }
         if path in public_paths or path.endswith((".css", ".js", ".png", ".jpg", ".jpeg", ".svg", ".ico", ".woff", ".woff2")):
             return None
@@ -257,6 +261,27 @@ if _FLASK:
         if path.startswith("/api/"):
             return jsonify({"detail": "Authentication required."}), 401
         return redirect("/login")
+
+    # Scraping and syncing run on the local machine only. On EC2 every visit arrives through
+    # nginx, which adds X-Forwarded-For, so the deployed site gets these controls disabled.
+    _LOCAL_ONLY_CONTROLS = {
+        "/api/alan/scrape/start", "/api/alan/scrape/stop",
+        "/api/alan/sync/ec2", "/api/alan/sync/ec2/stop",
+    }
+
+    def _scraper_controls_allowed() -> bool:
+        return (
+            request.remote_addr in ("127.0.0.1", "::1")
+            and not request.headers.get("X-Forwarded-For")
+            and request.host.split(":")[0] in ("localhost", "127.0.0.1", "[::1]")
+        )
+
+    @app.before_request
+    def enforce_local_only_controls():
+        changes_sources = request.path.startswith("/api/alan/sources/") and request.method == "POST"
+        if (request.path in _LOCAL_ONLY_CONTROLS or changes_sources) and not _scraper_controls_allowed():
+            return jsonify({"error": "Scraper and sync controls are only available on localhost."}), 403
+        return None
 
     @app.route("/")
     def index():
@@ -279,6 +304,21 @@ if _FLASK:
     def favicon():
         return Response(status=204)
 
+    @app.route("/assets/<path:filename>")
+    def hub_assets(filename):
+        return send_from_directory(str(HUB_DIR / "assets"), filename)
+
+    # The login page offers these; without routes they fell into the auth wall (401) and the
+    # page reported "Recovery instructions dispatched" although nothing happened.
+    @app.route("/api/auth/forgot-password", methods=["POST"])
+    def auth_forgot_password():
+        return jsonify({"message": "Password resets are handled by your workspace administrator — please contact them."}), 200
+
+    @app.route("/api/auth/social-login", methods=["POST"])
+    def auth_social_login():
+        # No identity provider is wired up, so never issue a session from here.
+        return jsonify({"detail": "Single sign-on is not enabled for this workspace. Please sign in with your work email and password."}), 503
+
     @app.route("/api/auth/login", methods=["POST"])
     def auth_login():
         data = request.get_json(silent=True) or {}
@@ -288,8 +328,7 @@ if _FLASK:
         if not email or not password:
             return jsonify({"detail": "Email and password are required."}), 400
 
-        valid_passwords = {ADMIN_PASSWORD, "alan1234", "builtbylal10"}
-        if email not in VALID_EMAILS or password not in valid_passwords:
+        if not ADMIN_PASSWORD or email not in VALID_EMAILS or not hmac.compare_digest(password.encode("utf-8"), ADMIN_PASSWORD.encode("utf-8")):
             return jsonify({"detail": "Invalid work email or password. Please try again."}), 401
 
         username = email.split("@")[0].replace(".", " ").title() or "Workspace Admin"
@@ -311,6 +350,8 @@ if _FLASK:
             max_age=7 * 86400,
             httponly=False,  # Allow JS access for token propagation
             samesite="Lax",
+            # HTTPS arrives through nginx, which sets X-Forwarded-Proto; never send the token over plain HTTP then.
+            secure=request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https",
             path="/"
         )
         return resp
@@ -344,97 +385,11 @@ if _FLASK:
     @app.route("/api/intelligence/categories")
     def api_intelligence_categories():
         """Dynamic category discovery endpoint for the Hub."""
+        # Card details live in categories.json ("hub_card"); slugs match /api/services.
+        cards = sorted(SERVICES, key=lambda s: s["hub_card"]["order"])
         categories = [
-            {
-                "slug": "activewear",
-                "port": 3008,
-                "title": "Activewear",
-                "subtitle": "Trend Intelligence",
-                "route": "/activewear/",
-                "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 42%",
-            },
-            {
-                "slug": "polo",
-                "port": 3009,
-                "title": "Polo",
-                "subtitle": "Trend Intelligence",
-                "route": "/polos/",
-                "image": "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 40%",
-            },
-            {
-                "slug": "ethnicwear",
-                "port": 3015,
-                "title": "Ethnicwear",
-                "subtitle": "Trend Intelligence",
-                "route": "/ethnic/",
-                "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 40%",
-            },
-            {
-                "slug": "westernwear",
-                "port": 3012,
-                "title": "Westernwear",
-                "subtitle": "Trend Intelligence",
-                "route": "/westernwear/",
-                "image": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 35%",
-            },
-            {
-                "slug": "shirts",
-                "port": 3011,
-                "title": "Shirts",
-                "subtitle": "Trend Intelligence",
-                "route": "/shirts/",
-                "image": "https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 36%",
-            },
-            {
-                "slug": "kidswear",
-                "port": 3010,
-                "title": "Kidswear",
-                "subtitle": "Trend Intelligence",
-                "route": "/kids/",
-                "image": "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 42%",
-            },
-            {
-                "slug": "occasionwear",
-                "port": 3014,
-                "title": "Occasionwear",
-                "subtitle": "Trend Intelligence",
-                "route": "/occasionwear/",
-                "image": "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 43%",
-            },
-            {
-                "slug": "innerwear",
-                "port": 3013,
-                "title": "Innerwear",
-                "subtitle": "Trend Intelligence",
-                "route": "/innerwear/",
-                "image": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 38%",
-            },
-            {
-                "slug": "special",
-                "port": 3019,
-                "title": "Special Arrow X USpolo",
-                "subtitle": "Trend Intelligence",
-                "route": "/special/",
-                "image": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 42%",
-            },
-            {
-                "slug": "maneet",
-                "port": 3020,
-                "title": "Maneet",
-                "subtitle": "Shirts Intelligence",
-                "route": "/maneet/",
-                "image": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1200&q=88",
-                "objectPos": "center 38%",
-            },
+            {"slug": s["slug"], "port": s["port"], **{k: v for k, v in s["hub_card"].items() if k != "order"}}
+            for s in cards
         ]
         return jsonify({"categories": categories, "total": len(categories)})
 
@@ -507,11 +462,12 @@ if _FLASK:
         with _STATUS_LOCK:
             now = time.time()
             if now - _STATUS_CACHE["timestamp"] < 2.0 and _STATUS_CACHE["data"] is not None:
-                return jsonify(_STATUS_CACHE["data"])
+                # The cache is shared by every visitor; whether controls are allowed is per request.
+                return jsonify({**_STATUS_CACHE["data"], "scraper_controls": _scraper_controls_allowed()})
 
-            pg_host = os.getenv("PG_HOST", "127.0.0.1")
-            pg_port = int(os.getenv("PG_PORT", 5432))
-            pg_user = os.getenv("PG_USER", "postgres")
+            pg_host = _env_setting("PG_HOST", "127.0.0.1")
+            pg_port = int(_env_setting("PG_PORT", "5432"))
+            pg_user = _env_setting("PG_USER", "postgres")
             pg_password = _env_setting("PG_PASSWORD")
 
             running = _running_scrapers()
@@ -548,6 +504,8 @@ if _FLASK:
 
                 return {
                     "name": svc["name"],
+                    "admin_title": svc.get("admin_title", svc["name"]),
+                    "subtitle": svc.get("subtitle", ""),
                     "folder": folder,
                     "port": svc["port"],
                     "db": db_name,
@@ -565,11 +523,12 @@ if _FLASK:
                 "services": statuses,
                 "total_products": sum(s["product_count"] for s in statuses),
                 "active_scrapers": len(running),
+                "ec2_host": _env_setting("EC2_HOST"),
                 "timestamp": now
             }
             _STATUS_CACHE["timestamp"] = now
             _STATUS_CACHE["data"] = result
-            return jsonify(result)
+            return jsonify({**result, "scraper_controls": _scraper_controls_allowed()})
 
     @app.route("/api/alan/scrape/start", methods=["POST"])
     def api_alan_scrape_start():
@@ -673,6 +632,326 @@ if _FLASK:
             "lines": found_lines,
             "count": len(found_lines)
         })
+
+    # ── Extra sources: Myntra / Shopify URLs scraped with a category (see source_scraper.py) ──
+    _SOURCE_JOBS = {}
+    _MAX_SOURCES = 200
+
+    def _sources_file(svc):
+        return BASE_DIR / svc["folder"] / "sources.json"
+
+    def _read_sources(svc):
+        try:
+            return json.loads(_sources_file(svc).read_text("utf-8")).get("urls", [])
+        except (OSError, ValueError):
+            return []
+
+    def _write_sources(svc, urls):
+        path = _sources_file(svc)
+        tmp = path.with_suffix(".json.tmp")
+        tmp.write_text(json.dumps({"urls": urls}, indent=2, ensure_ascii=False), "utf-8")
+        os.replace(tmp, path)
+
+    def _sources_log(svc):
+        return BASE_DIR / ".scraper_logs" / f"{svc['folder'].replace(' ', '_')}_sources.log"
+
+    def _source_job_running(folder):
+        proc = _SOURCE_JOBS.get(folder)
+        return bool(proc and proc.poll() is None)
+
+    @app.route("/api/alan/sources/<path:folder>", methods=["GET"])
+    def api_alan_sources_list(folder):
+        svc = _match_service(folder)
+        if not svc:
+            return jsonify({"error": "Unknown category folder"}), 400
+        from source_scraper import classify
+        urls = [{**u, "kind": classify(u["url"])[0]} for u in _read_sources(svc)]
+        return jsonify({"folder": svc["folder"], "name": svc["name"], "urls": urls,
+                        "running": _source_job_running(svc["folder"])})
+
+    @app.route("/api/alan/sources/<path:folder>", methods=["POST"])
+    def api_alan_sources_add(folder):
+        svc = _match_service(folder)
+        if not svc:
+            return jsonify({"error": "Unknown category folder"}), 400
+        from source_scraper import classify
+        raw = str((request.get_json(silent=True) or {}).get("urls") or "")
+        current = _read_sources(svc)
+        known = {u["url"] for u in current}
+        added, rejected = [], []
+        for line in re.split(r"[\s,]+", raw):
+            url = line.strip()
+            if not url:
+                continue
+            kind, detail = classify(url)
+            if kind == "invalid":
+                rejected.append({"url": url, "reason": detail})
+            elif url not in known:
+                known.add(url)
+                added.append({"url": url, "added_at": time.strftime("%Y-%m-%d %H:%M")})
+        if len(current) + len(added) > _MAX_SOURCES:
+            return jsonify({"error": f"At most {_MAX_SOURCES} URLs per category"}), 400
+        _write_sources(svc, current + added)
+        return jsonify({"added": len(added), "rejected": rejected, "total": len(current) + len(added)})
+
+    @app.route("/api/alan/sources/<path:folder>/remove", methods=["POST"])
+    def api_alan_sources_remove(folder):
+        svc = _match_service(folder)
+        if not svc:
+            return jsonify({"error": "Unknown category folder"}), 400
+        url = str((request.get_json(silent=True) or {}).get("url") or "")
+        current = _read_sources(svc)
+        kept = [u for u in current if u["url"] != url]
+        _write_sources(svc, kept)
+        return jsonify({"removed": len(current) - len(kept), "total": len(kept)})
+
+    @app.route("/api/alan/sources/<path:folder>/scrape", methods=["POST"])
+    def api_alan_sources_scrape(folder):
+        svc = _match_service(folder)
+        if not svc:
+            return jsonify({"error": "Unknown category folder"}), 400
+        if not _read_sources(svc):
+            return jsonify({"error": "No URLs saved for this category yet"}), 400
+        # One writer per database: not while this category's scraper or a sources job runs.
+        if _running_scrapers().get(svc["folder"]) or _source_job_running(svc["folder"]):
+            return jsonify({"error": f"{svc['folder']} is already being scraped — try again when it finishes"}), 409
+        log_path = _sources_log(svc)
+        log_path.parent.mkdir(exist_ok=True)
+        handle = open(log_path, "a", encoding="utf-8")
+        handle.write(f"\n===== Sources scrape started {time.strftime('%Y-%m-%d %H:%M:%S')} =====\n")
+        handle.flush()
+        # --snapshot so the new products show in snapshot-based views straight away.
+        proc = subprocess.Popen([SCRAPER_PYTHON, str(BASE_DIR / "source_scraper.py"), "--snapshot"],
+                                cwd=str(BASE_DIR / svc["folder"]), stdout=handle, stderr=subprocess.STDOUT,
+                                start_new_session=True)
+        _reap(proc, handle)
+        _SOURCE_JOBS[svc["folder"]] = proc
+        return jsonify({"status": "started", "folder": svc["folder"], "pid": proc.pid})
+
+    @app.route("/api/alan/sources/<path:folder>/log", methods=["GET"])
+    def api_alan_sources_log(folder):
+        svc = _match_service(folder)
+        if not svc:
+            return jsonify({"error": "Unknown category folder"}), 400
+        lines = []
+        try:
+            with open(_sources_log(svc), "r", encoding="utf-8", errors="replace") as f:
+                lines = [l.rstrip("\n") for l in f.readlines()[-150:]]
+        except OSError:
+            pass
+        return jsonify({"lines": lines, "running": _source_job_running(svc["folder"])})
+
+    _SYNC_STATE = {
+        "running": False,
+        "pid": None,
+        "proc": None,
+        "folder": None,
+        "start_time": 0,
+        "end_time": 0,
+        "exit_code": None,
+        "log_file": None,
+    }
+    _SYNC_LOCK = threading.Lock()
+
+    @app.route("/api/alan/sync/ec2", methods=["POST"])
+    def api_alan_sync_ec2():
+        """Trigger sync of databases and code to EC2."""
+        data = request.get_json(silent=True) or {}
+        target_folder = data.get("folder", "all")
+        if target_folder != "all":
+            # The name reaches pipeline.sh and the log file path, so only known categories pass.
+            matched_svc = _match_service(target_folder)
+            if not matched_svc:
+                return jsonify({"error": f"Unknown category folder '{target_folder}'"}), 400
+            target_folder = matched_svc["folder"]
+
+        with _SYNC_LOCK:
+            if _SYNC_STATE["running"]:
+                proc = _SYNC_STATE.get("proc")
+                if proc and proc.poll() is None:
+                    return jsonify({
+                        "error": "EC2 Sync is already in progress",
+                        "folder": _SYNC_STATE["folder"],
+                        "pid": _SYNC_STATE["pid"],
+                        "elapsed": round(time.time() - _SYNC_STATE["start_time"], 1)
+                    }), 409
+                else:
+                    _SYNC_STATE["running"] = False
+
+            log_dir = BASE_DIR / ".pipeline_logs"
+            log_dir.mkdir(exist_ok=True)
+            ts = time.strftime("%Y%m%d_%H%M%S")
+            log_file = log_dir / f"sync_ec2_{target_folder.replace(' ', '_')}_{ts}.log"
+
+            cmd = ["bash", str(BASE_DIR / "pipeline.sh"), "--sync-only"]
+            if target_folder != "all":
+                cmd.extend(["--only", target_folder])
+
+            log_handle = open(log_file, "w", encoding="utf-8")
+            proc = subprocess.Popen(cmd, cwd=str(BASE_DIR), stdout=log_handle, stderr=subprocess.STDOUT, start_new_session=True)
+            _reap(proc, log_handle)
+
+            _SYNC_STATE["running"] = True
+            _SYNC_STATE["pid"] = proc.pid
+            _SYNC_STATE["proc"] = proc
+            _SYNC_STATE["folder"] = target_folder
+            _SYNC_STATE["start_time"] = time.time()
+            _SYNC_STATE["end_time"] = 0
+            _SYNC_STATE["exit_code"] = None
+            _SYNC_STATE["log_file"] = str(log_file)
+
+            return jsonify({
+                "status": "started",
+                "folder": target_folder,
+                "pid": proc.pid,
+                "log_file": str(log_file)
+            })
+
+    @app.route("/api/alan/sync/ec2/status")
+    def api_alan_sync_ec2_status():
+        """Retrieve live status and output logs of EC2 Sync."""
+        with _SYNC_LOCK:
+            proc = _SYNC_STATE.get("proc")
+            running = _SYNC_STATE["running"]
+            if running and proc:
+                exit_code = proc.poll()
+                if exit_code is not None:
+                    _SYNC_STATE["running"] = False
+                    _SYNC_STATE["exit_code"] = exit_code
+                    _SYNC_STATE["end_time"] = time.time()
+                    running = False
+
+            log_file = _SYNC_STATE.get("log_file")
+            lines = []
+            if log_file and os.path.exists(log_file):
+                try:
+                    with open(log_file, "r", encoding="utf-8", errors="replace") as f:
+                        lines = [l.rstrip("\r\n") for l in f.readlines()[-200:]]
+                except Exception:
+                    pass
+
+            start_t = _SYNC_STATE["start_time"]
+            elapsed = round((time.time() - start_t) if running else (_SYNC_STATE["end_time"] - start_t if start_t else 0), 1)
+
+            return jsonify({
+                "status": "success",
+                "running": running,
+                "folder": _SYNC_STATE.get("folder"),
+                "pid": _SYNC_STATE.get("pid"),
+                "elapsed": max(0, elapsed),
+                "exit_code": _SYNC_STATE.get("exit_code"),
+                "lines": lines
+            })
+
+    # ─── SIDEBAR & NAVIGATION CONFIGURATION ───────────────────────
+    SIDEBAR_CONFIG_FILE = BASE_DIR / "sidebar_config.json"
+
+    def _default_sidebar_config():
+        return {
+            "_comment": "Sidebar and navigation management configuration. Managed via /alan Admin Console.",
+            "global": {
+                "sidebar_enabled": True,
+                "default_collapsed": False,
+                "allow_user_toggle": True,
+                "show_brand_header": True,
+                "show_sync_status": True,
+                "show_user_profile": True,
+                "show_sub_sidebars": True,
+                "default_landing_view": "dashboard",
+                "items": {
+                    "dashboard": {"enabled": True, "label": "Dashboard", "order": 1, "category": "Overview"},
+                    "demand-radar": {"enabled": True, "label": "Demand Radar", "order": 2, "category": "Intelligence"},
+                    "demand-radar-beta": {"enabled": True, "label": "Demand Radar (Beta)", "order": 3, "category": "Intelligence"},
+                    "comparator": {"enabled": True, "label": "Brand Comparator", "order": 3, "category": "Intelligence"},
+                    "price-intel": {"enabled": True, "label": "Price Intelligence", "order": 4, "category": "Intelligence"},
+                    "revenue-intel": {"enabled": True, "label": "Revenue Intelligence", "order": 5, "category": "Intelligence"},
+                    "colors": {"enabled": True, "label": "Color Intelligence", "order": 6, "category": "Intelligence"},
+                    "fabric": {"enabled": True, "label": "Fabric Intelligence", "order": 7, "category": "Intelligence"},
+                    "catalog": {"enabled": True, "label": "Product Catalog", "order": 8, "category": "Catalog"},
+                    "brands": {"enabled": True, "label": "Brands Intelligence", "order": 9, "category": "Intelligence"},
+                    "compare": {"enabled": True, "label": "Compare Products", "order": 10, "category": "Catalog"},
+                    "category-analysis": {"enabled": True, "label": "Category Analysis", "order": 11, "category": "Intelligence"},
+                    "insights": {"enabled": True, "label": "Trend Intel", "order": 12, "category": "Analytics"},
+                    "daily-movement": {"enabled": True, "label": "Market Moves", "order": 13, "category": "Analytics"},
+                    "analytics-intelligence": {"enabled": True, "label": "Sales Monitor", "order": 14, "category": "Analytics"},
+                    "scraper-logs": {"enabled": True, "label": "Logs", "order": 15, "category": "System"},
+                    "data-issues": {"enabled": True, "label": "Data Issues", "order": 16, "category": "System"},
+                    "ai-assistant": {"enabled": True, "label": "AI Assistant", "order": 17, "category": "System"}
+                }
+            },
+            "categories": {}
+        }
+
+    def _load_sidebar_config():
+        try:
+            if SIDEBAR_CONFIG_FILE.exists():
+                return json.loads(SIDEBAR_CONFIG_FILE.read_text("utf-8"))
+        except Exception as e:
+            print(f"[WARN] Failed to read sidebar_config.json: {e}")
+        return _default_sidebar_config()
+
+    def _save_sidebar_config(data):
+        try:
+            SIDEBAR_CONFIG_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
+            return True
+        except Exception as e:
+            print(f"[ERROR] Failed to write sidebar_config.json: {e}")
+            return False
+
+    @app.route("/api/alan/sidebar-config", methods=["GET"])
+    def api_alan_sidebar_config_get():
+        cfg = _load_sidebar_config()
+        # Include list of available categories
+        return jsonify({
+            "config": cfg,
+            "categories": [{"folder": s["folder"], "name": s["name"], "admin_title": s.get("admin_title", s["name"])} for s in SERVICES]
+        })
+
+    @app.route("/api/alan/sidebar-config", methods=["POST"])
+    def api_alan_sidebar_config_post():
+        data = request.get_json(silent=True) or {}
+        config_payload = data.get("config", data)
+        if not isinstance(config_payload, dict):
+            return jsonify({"error": "Invalid configuration format"}), 400
+
+        # Preserve root structure if needed
+        existing = _load_sidebar_config()
+        if "global" in config_payload:
+            existing["global"] = config_payload["global"]
+        if "categories" in config_payload:
+            existing["categories"] = config_payload["categories"]
+
+        if _save_sidebar_config(existing):
+            return jsonify({"status": "saved", "config": existing})
+        else:
+            return jsonify({"error": "Failed to write sidebar configuration"}), 500
+
+    @app.route("/api/alan/sidebar-config/reset", methods=["POST"])
+    def api_alan_sidebar_config_reset():
+        defaults = _default_sidebar_config()
+        if _save_sidebar_config(defaults):
+            return jsonify({"status": "reset", "config": defaults})
+        return jsonify({"error": "Failed to reset sidebar configuration"}), 500
+
+    @app.route("/api/sidebar-config", methods=["GET"])
+    def api_sidebar_config_resolved():
+        target_folder = request.args.get("folder") or request.args.get("category") or ""
+        cfg = _load_sidebar_config()
+        global_cfg = cfg.get("global", {})
+        if target_folder and target_folder in cfg.get("categories", {}):
+            cat_cfg = cfg["categories"][target_folder]
+            # Deep merge global and category settings
+            merged = json.loads(json.dumps(global_cfg))
+            for k, v in cat_cfg.items():
+                if k == "items" and isinstance(v, dict):
+                    merged.setdefault("items", {})
+                    for item_k, item_v in v.items():
+                        merged["items"][item_k] = {**merged["items"].get(item_k, {}), **item_v}
+                else:
+                    merged[k] = v
+            return jsonify(merged)
+        return jsonify(global_cfg)
+
 
 
 def run_hub():

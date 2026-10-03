@@ -3,24 +3,16 @@
 #  LAL10 Fashion Intelligence — Production Manager
 # ============================================================
 
-BASE_DIR="/var/www/myntra_gtm"
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"  # /var/www/myntra_gtm on EC2
 PIDS_FILE="$BASE_DIR/.running_pids"
 PYTHON="$BASE_DIR/venv/bin/python3"
 GUNICORN="$BASE_DIR/venv/bin/gunicorn"
 HUB_PORT=3000
 
-declare -a SERVICES=(
-  "Activewear|ACTIVEWEAR|3008"
-  "Polo|POLOS|3009"
-  "Kids|Kids|3010"
-  "Shirts|Shirts|3011"
-  "Westernwear|Westerwear|3012"
-  "Innerwear|Hosiery|3013"
-  "Occasionwear|Ocassionwear|3014"
-  "Women Ethnic|WOMEN ETHNIC|3015"
-  "Special Arrow X USpolo|SPECIAL|3019"
-  "Maneet|Maneet|3020"
-)
+# Defined once in categories.json (see categories.py).
+SERVICES=()
+while IFS= read -r line; do SERVICES+=("$line"); done < <("$PYTHON" "$BASE_DIR/categories.py" '{name}|{folder}|{port}')
+[[ ${#SERVICES[@]} -gt 0 ]] || { echo "No categories loaded from $BASE_DIR/categories.json" >&2; exit 1; }
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'

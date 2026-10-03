@@ -3,465 +3,618 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LAL10 | Fashion Intelligence</title>
-<meta name="description" content="LAL10 Fashion Intelligence — category-wise trend intelligence, market insights, price trends and brand intelligence.">
+<title>Fashion Intelligence Hub</title>
+<meta name="description" content="Real-time market intelligence, brand insights, price trends, demand signals and consumer preferences across key fashion categories.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-
-:root{
-  --bg:#f7f4ee;
-  --paper:#fffdf9;
-  --ink:#171717;
-  --muted:#686b75;
-  --soft:#e8e2d8;
-  --brown:#9a6a3c;
-  --white:#fff;
-  --radius:10px;
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html{scroll-behavior:smooth}
-
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg);
-  color:var(--ink);
-  min-height:100vh;
-  overflow-x:hidden;
+:root {
+  --bg-canvas: #f6f3ed;
+  --bg-canvas-warm: #eee9e0;
+  --ink-primary: #141414;
+  --ink-secondary: #5f5b55;
+  --accent-gold: #96714d;
+  --card-radius: 12px;
 }
 
-/* =========================
-   HEADER
-========================= */
-.site-header{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  z-index:20;
-  padding:24px 38px;
+html {
+  scroll-behavior: smooth;
 }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:20px;
-  width:max-content;
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-canvas);
+  background-image: 
+    radial-gradient(ellipse at 15% 15%, rgba(255, 255, 255, 0.6) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 10%, rgba(248, 242, 233, 0.7) 0%, transparent 55%),
+    linear-gradient(180deg, #f7f4ee 0%, #eee8df 100%);
+  color: var(--ink-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.brand-name{
-  font-family:'Playfair Display',serif;
-  font-size:35px;
-  line-height:1;
-  font-weight:600;
-  letter-spacing:-1.8px;
+/* ==========================================================================
+   BRAND LOGOS (Overlay in front of Hero Image)
+   ========================================================================== */
+.site-branding-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  padding: clamp(20px, 2vw, 32px) clamp(24px, 3.2vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: transparent;
+  pointer-events: auto;
 }
 
-.brand-divider{
-  width:1px;
-  height:32px;
-  background:#8d8d8d;
+.brand-logos-container {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(14px, 1.4vw, 22px);
 }
 
-.brand-sub{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-  font-size:12px;
-  line-height:1;
-  letter-spacing:4px;
-  font-weight:500;
+.brand-logo-lal10 {
+  height: clamp(34px, 2.8vw, 46px);
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.4));
 }
 
-/* =========================
-   HERO
-========================= */
-.hero{
-  position:relative;
-  min-height:280px;
-  overflow:hidden;
-  display:flex;
-  align-items:flex-end;
-  padding:72px 5.2% 30px;
-  background:
-    linear-gradient(90deg,rgba(255,253,249,.98) 0%,rgba(255,253,249,.92) 35%,rgba(255,253,249,.22) 68%,rgba(255,253,249,.08) 100%),
-    url("https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=2200&q=88")
-    center 32%/cover no-repeat;
+.brand-divider {
+  width: 1.5px;
+  height: clamp(26px, 2.2vw, 36px);
+  background: rgba(0, 0, 0, 0.25);
 }
 
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(0deg,rgba(255,253,249,.18),transparent 50%);
-  pointer-events:none;
+.brand-logo-fashionos {
+  height: clamp(30px, 2.4vw, 42px);
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.4));
 }
 
-.hero-content{
-  position:relative;
-  z-index:2;
-  max-width:760px;
+.brand-logo-lal10:hover,
+.brand-logo-fashionos:hover {
+  transform: scale(1.03);
 }
 
-.eyebrow{
-  color:#9b6836;
-  font-size:11px;
-  letter-spacing:5px;
-  text-transform:uppercase;
-  margin-bottom:17px;
-  font-weight:500;
+/* ==========================================================================
+   EDITORIAL HERO SECTION (Wide, Fluid & Grand Scale)
+   ========================================================================== */
+.hero-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-height: clamp(480px, 36vw, 620px);
+  padding: clamp(86px, 7.5vw, 115px) clamp(24px, 3.2vw, 56px) 36px clamp(24px, 3.2vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
-.hero-title{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(48px,5.2vw,76px);
-  line-height:.98;
-  letter-spacing:-3px;
-  font-weight:600;
-  margin-bottom:12px;
+/* Panoramic Hero Model Backdrop */
+.hero-backdrop-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 62%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.hero-description{
-  max-width:700px;
-  color:#6c6f79;
-  font-size:18px;
-  line-height:1.45;
-  font-weight:400;
+.hero-backdrop-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 45% 20%;
+  filter: contrast(1.02) brightness(1.02);
 }
 
-/* =========================
-   HERO SIDE PANEL
-========================= */
-.hero-panel{
-  position:absolute;
-  z-index:3;
-  right:3.2%;
-  bottom:9px;
-  width:345px;
-  min-height:200px;
-  padding:32px 42px;
-  border:1px solid rgba(255,255,255,.72);
-  border-radius:10px;
-  background:rgba(255,252,247,.84);
-  backdrop-filter:blur(7px);
-  -webkit-backdrop-filter:blur(7px);
+/* Seamless Editorial Gradients */
+.hero-backdrop-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: 
+    linear-gradient(90deg, #f6f3ed 0%, #f6f3ed 18%, rgba(246, 243, 237, 0.85) 35%, rgba(246, 243, 237, 0.25) 58%, transparent 100%),
+    linear-gradient(180deg, rgba(246, 243, 237, 0.3) 0%, transparent 15%, transparent 75%, #f6f3ed 100%);
+  pointer-events: none;
 }
 
-.hero-panel-title{
-  font-size:12px;
-  line-height:1.9;
-  letter-spacing:4px;
-  font-weight:500;
+/* Left Hero Content */
+.hero-content-col {
+  position: relative;
+  z-index: 10;
+  max-width: clamp(680px, 50vw, 860px);
 }
 
-.hero-panel-line{
-  width:50px;
-  height:2px;
-  background:#a2713d;
-  margin:15px 0 17px;
+.hero-eyebrow {
+  font-size: clamp(12.5px, 0.95vw, 15px);
+  font-weight: 600;
+  letter-spacing: 4.5px;
+  text-transform: uppercase;
+  color: #726c64;
+  margin-bottom: 16px;
 }
 
-.hero-panel-text{
-  color:#676972;
-  font-size:16px;
-  line-height:1.45;
+.hero-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(56px, 5.4vw, 92px);
+  font-weight: 600;
+  line-height: 0.96;
+  letter-spacing: -2.5px;
+  color: #121212;
+  margin-bottom: 22px;
 }
 
-/* =========================
-   GRID
-========================= */
-.intelligence-grid{
-  width:100%;
-  padding:0 30px 34px;
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:16px;
+.hero-title span {
+  display: block;
 }
 
-/* =========================
-   CARD
-========================= */
-.intelligence-card{
-  position:relative;
-  height:210px;
-  overflow:hidden;
-  border-radius:9px;
-  text-decoration:none;
-  color:#fff;
-  isolation:isolate;
-  cursor:pointer;
-  background:#8c7966;
-  box-shadow:0 1px 2px rgba(0,0,0,.03);
-  transition:
-    transform .35s ease,
-    box-shadow .35s ease;
+.hero-desc {
+  font-size: clamp(16.5px, 1.3vw, 21px);
+  line-height: 1.55;
+  color: #555049;
+  max-width: 700px;
+  margin-bottom: 34px;
 }
 
-.intelligence-card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:1;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0,0,0,.04) 5%,
-      rgba(0,0,0,.05) 35%,
-      rgba(0,0,0,.62) 100%
-    );
+/* Stat Metrics Row - Strictly Single Line on Desktop */
+.stats-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1vw, 18px);
+  flex-wrap: nowrap;
 }
 
-.intelligence-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 14px 30px rgba(35,25,15,.15);
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: clamp(11px, 0.85vw, 15px) clamp(16px, 1.2vw, 22px);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-.card-image{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center;
-  transform:scale(1.005);
-  transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .5s ease;
+.stat-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.95);
 }
 
-.intelligence-card:hover .card-image{
-  transform:scale(1.045);
-  filter:saturate(1.04);
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
 }
 
-.card-content{
-  position:absolute;
-  z-index:2;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:23px 23px 17px;
+.stat-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
-.card-title{
-  font-family:'Playfair Display',serif;
-  font-size:34px;
-  line-height:1;
-  letter-spacing:-1px;
-  font-weight:600;
-  margin-bottom:7px;
-  text-shadow:0 1px 4px rgba(0,0,0,.15);
+.stat-val-lg {
+  font-size: clamp(23px, 1.8vw, 30px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.4px;
+  color: #141414;
 }
 
-.card-subtitle{
-  font-size:16px;
-  line-height:1.2;
-  font-weight:400;
-  color:rgba(255,255,255,.97);
+.stat-val-txt {
+  font-size: clamp(15px, 1.15vw, 19px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.2px;
+  color: #141414;
 }
 
-.card-arrow{
-  position:absolute;
-  right:20px;
-  bottom:17px;
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  background:rgba(255,255,255,.96);
-  color:#252525;
-  display:grid;
-  place-items:center;
-  font-size:26px;
-  font-weight:300;
-  transition:
-    transform .3s ease,
-    background .3s ease;
+.stat-meta {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(8.5px, 0.68vw, 10.5px);
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #625d55;
 }
 
-.intelligence-card:hover .card-arrow{
-  transform:translateX(4px);
-  background:#fff;
+/* Right Checklist Panel */
+.hero-checklist-panel {
+  position: relative;
+  z-index: 10;
+  width: clamp(340px, 24vw, 420px);
+  flex-shrink: 0;
+  padding: clamp(28px, 2.2vw, 38px) clamp(30px, 2.4vw, 42px);
+  background: rgba(248, 245, 239, 0.84);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
 }
 
-.card-status{
-  position:absolute;
-  right:80px;
-  top:18px;
-  z-index:3;
-  display:none;
-  align-items:center;
-  gap:6px;
-  padding:5px 8px;
-  border-radius:30px;
-  background:rgba(255,255,255,.14);
-  backdrop-filter:blur(4px);
-  font-size:9px;
-  letter-spacing:1px;
-  text-transform:uppercase;
+.panel-header {
+  font-size: clamp(11.5px, 0.85vw, 13.5px);
+  font-weight: 700;
+  line-height: 1.55;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: #3b3732;
+  margin-bottom: 24px;
 }
 
-.status-dot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#c99762;
+.checklist-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.status-dot.online{background:#72a77b}
-.status-dot.offline{background:#c96c62}
-
-/* =========================
-   FOOTER
-========================= */
-.footer{
-  padding:18px 30px 28px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  color:#85858a;
-  font-size:11px;
-  border-top:1px solid rgba(35,35,35,.06);
+.checklist-entry {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: clamp(14.5px, 1.05vw, 17px);
+  font-weight: 500;
+  color: #24221f;
 }
 
-.footer-brand{
-  letter-spacing:1px;
+.entry-check-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-gold);
 }
 
-.footer-right{
-  letter-spacing:.4px;
+.entry-check-icon svg {
+  width: 20px;
+  height: 20px;
 }
 
-/* =========================
-   LOADING
-========================= */
-.card.loading{
-  background:linear-gradient(110deg,#ddd7ce 8%,#f0ece5 18%,#ddd7ce 33%);
-  background-size:200% 100%;
-  animation:shimmer 1.4s linear infinite;
+/* ==========================================================================
+   CATEGORY INTELLIGENCE GRID (3x3 - 9 CARDS - Grand & Fluid)
+   ========================================================================== */
+.categories-section {
+  width: 100%;
+  max-width: 100%;
+  padding: 16px clamp(24px, 3.2vw, 56px) 64px clamp(24px, 3.2vw, 56px);
 }
 
-@keyframes shimmer{
-  to{background-position:-200% 0}
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 1.8vw, 26px);
 }
 
-.card.loading .card-image,
-.card.loading .card-content{visibility:hidden}
+/* Base Card Style */
+.cat-card {
+  position: relative;
+  height: clamp(260px, 18.5vw, 325px);
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  background-color: #24201d;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-/* =========================
-   RESPONSIVE
-========================= */
-@media(max-width:1100px){
-  .hero{
-    padding-left:38px;
-    padding-right:38px;
+.cat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 42px rgba(20, 15, 10, 0.25);
+}
+
+/* Card Photographic Background Layer */
+.card-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+}
+
+.cat-card:hover .card-media {
+  transform: scale(1.05);
+  filter: brightness(1.04);
+}
+
+/* Scrim Gradient */
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 8, 7, 0.4) 0%,
+    rgba(10, 8, 7, 0.12) 35%,
+    rgba(10, 8, 7, 0.5) 65%,
+    rgba(10, 8, 7, 0.88) 100%
+  );
+  pointer-events: none;
+}
+
+/* Card Upper Content */
+.card-num-badge {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  z-index: 4;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.6px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.card-info {
+  position: absolute;
+  left: 24px;
+  bottom: 58px;
+  z-index: 4;
+  padding-right: 80px;
+}
+
+.card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(34px, 2.6vw, 46px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.6px;
+  color: #ffffff;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.card-subtitle {
+  font-size: clamp(10.5px, 0.8vw, 12.5px);
+  font-weight: 600;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* Floating White Circular Arrow Button */
+.card-arrow {
+  position: absolute;
+  right: 24px;
+  bottom: 60px;
+  z-index: 5;
+  width: clamp(44px, 3.2vw, 52px);
+  height: clamp(44px, 3.2vw, 52px);
+  border-radius: 50%;
+  background: #ffffff;
+  color: #141414;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cat-card:hover .card-arrow {
+  transform: translateX(4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Full-Width Translucent Glass Footer Bar */
+.card-footer-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: clamp(42px, 3vw, 48px);
+  z-index: 6;
+  background: rgba(18, 15, 14, 0.58);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0 14px;
+}
+
+.footer-nav-link {
+  font-size: clamp(12px, 0.9vw, 14px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  letter-spacing: 0.2px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.footer-nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.footer-bar-sep {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 10px;
+  user-select: none;
+}
+
+/* ==========================================================================
+   CARD 09: SPECIAL COLLECTIONS (Distinct Warm Luxury Styling)
+   ========================================================================== */
+.cat-card.card-style-light .card-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(240, 235, 225, 0.25) 40%,
+    rgba(230, 222, 210, 0.65) 75%,
+    rgba(220, 212, 198, 0.9) 100%
+  );
+}
+
+.cat-card.card-style-light .card-num-badge {
+  color: #6a645d;
+}
+
+.cat-card.card-style-light .card-title {
+  color: #121212;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+.cat-card.card-style-light .card-subtitle {
+  color: #5a4a3a;
+  text-shadow: none;
+}
+
+.cat-card.card-style-light .card-footer-bar {
+  background: rgba(215, 208, 196, 0.75);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cat-card.card-style-light .footer-nav-link {
+  color: rgba(38, 34, 30, 0.85);
+}
+
+.cat-card.card-style-light .footer-nav-link:hover {
+  color: #000000;
+  background: rgba(0, 0, 0, 0.06);
+  text-shadow: none;
+}
+
+.cat-card.card-style-light .footer-bar-sep {
+  color: rgba(38, 34, 30, 0.3);
+}
+
+/* ==========================================================================
+   FOOTER (Fluid & Wide)
+   ========================================================================== */
+.site-footer {
+  width: 100%;
+  max-width: 100%;
+  padding: 24px clamp(20px, 2.6vw, 44px) 36px clamp(20px, 2.6vw, 44px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  color: #7a7671;
+  font-size: 11.5px;
+}
+
+.footer-left {
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #55514c;
+}
+
+.footer-right {
+  letter-spacing: 0.3px;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (Adaptive Breakpoints)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero-container {
+    padding: 44px 28px 20px 28px;
   }
-
-  .hero-panel{
-    width:300px;
-    padding:26px 30px;
+  .hero-backdrop-wrapper {
+    width: 60%;
   }
-
-  .intelligence-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
+  .categories-section {
+    padding: 10px 28px 40px 28px;
   }
-}
-
-@media(max-width:760px){
-  .site-header{
-    padding:20px 18px;
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .brand-name{
-    font-size:29px;
-  }
-
-  .brand-divider{
-    height:27px;
-  }
-
-  .brand-sub{
-    font-size:9px;
-    letter-spacing:3px;
-  }
-
-  .hero{
-    min-height:520px;
-    padding:105px 20px 28px;
-    align-items:flex-end;
-    background:
-      linear-gradient(0deg,rgba(255,253,249,.98) 0%,rgba(255,253,249,.77) 42%,rgba(255,253,249,.14) 100%),
-      url("https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1400&q=85")
-      63% center/cover no-repeat;
-  }
-
-  .hero-content{
-    max-width:100%;
-  }
-
-  .hero-title{
-    font-size:48px;
-    letter-spacing:-2px;
-  }
-
-  .hero-description{
-    font-size:15px;
-    max-width:95%;
-  }
-
-  .hero-panel{
-    display:none;
-  }
-
-  .intelligence-grid{
-    grid-template-columns:1fr;
-    padding:0 14px 25px;
-    gap:12px;
-  }
-
-  .intelligence-card{
-    height:220px;
-  }
-
-  .card-title{
-    font-size:32px;
-  }
-
-  .footer{
-    padding:16px;
-    flex-direction:column;
-    gap:7px;
-    text-align:center;
+  .site-top-bar, .site-footer {
+    padding-left: 28px;
+    padding-right: 28px;
   }
 }
 
-@media(max-width:420px){
-  .brand{
-    gap:12px;
+@media (max-width: 780px) {
+  .hero-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    padding: 48px 20px 20px 20px;
+    min-height: auto;
   }
-
-  .brand-name{
-    font-size:26px;
+  .hero-backdrop-wrapper {
+    width: 100%;
+    opacity: 0.35;
   }
-
-  .brand-sub{
-    letter-spacing:2px;
+  .hero-backdrop-fade {
+    background: linear-gradient(180deg, #f6f3ed 0%, rgba(246, 243, 237, 0.8) 50%, #f6f3ed 100%);
   }
-
-  .hero-title{
-    font-size:43px;
+  .hero-checklist-panel {
+    width: 100%;
+    max-width: 100%;
   }
-
-  .card-title{
-    font-size:29px;
+  .stats-row {
+    flex-wrap: wrap;
   }
+  .categories-section {
+    padding: 10px 20px 36px 20px;
+  }
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .site-top-bar, .site-footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
 
-  .card-arrow{
-    width:44px;
-    height:44px;
+@media (max-width: 580px) {
+  .hero-title {
+    font-size: 40px;
+  }
+  .stat-pill {
+    padding: 6px 10px;
+  }
+  .stat-val-lg {
+    font-size: 16px;
+  }
+  .stat-meta {
+    font-size: 7px;
+  }
+  .site-footer {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
   }
 }
 </style>
@@ -469,167 +622,496 @@ body{
 
 <body>
 
-<header class="site-header" style="display:flex;justify-content:space-between;align-items:center;">
-  <div class="brand">
-    <div class="brand-name">LAL10</div>
-    <div class="brand-divider"></div>
-    <div class="brand-sub">
-      <span>FASHION</span>
-      <span>INTELLIGENCE</span>
-    </div>
+<!-- ==========================================================================
+     BRAND LOGOS (Enlarged & Prominent, No Scraper Ops)
+     ========================================================================== -->
+<header class="site-branding-header">
+  <div class="brand-logos-container">
+    <img src="https://launchpad.lal10.com/logo.png" alt="LAL10" class="brand-logo-lal10" onerror="this.style.display='none'">
+    <span class="brand-divider"></span>
+    <img src="https://thefashionos.com/assets/logo-Dl4_z_fN.png" alt="FashionOS" class="brand-logo-fashionos" onerror="this.style.display='none'">
   </div>
-  <a href="/alan" style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(23,23,23,0.85);color:#fff;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.15);transition:all 0.2s;">
-    ⚡ Scraper Ops (/alan)
-  </a>
 </header>
 
-<section class="hero">
-  <div class="hero-content">
-    <div class="eyebrow">Data Trends Opportunities</div>
-    <h1 class="hero-title">Fashion Intelligence</h1>
-    <p class="hero-description">
-      Explore category-wise trend intelligence, market insights, top brands,
-      price trends and more.
-    </p>
+<!-- ==========================================================================
+     HERO SECTION
+     ========================================================================== -->
+<section class="hero-container">
+  <!-- Panoramic Hero Backdrop Model Image -->
+  <div class="hero-backdrop-wrapper">
+    <img
+      class="hero-backdrop-img"
+      src="/assets/hero_fashion_model.jpg"
+      alt="Fashion Intelligence Editorial"
+      loading="eager"
+    >
+    <div class="hero-backdrop-fade"></div>
   </div>
 
-  <div class="hero-panel">
-    <div class="hero-panel-title">
+  <!-- Left Hero Copy & Metric Badges -->
+  <div class="hero-content-col">
+    <div class="hero-eyebrow">FASHION INTELLIGENCE HUB</div>
+    <h1 class="hero-title">
+      <span>Fashion</span>
+      <span>Intelligence Hub</span>
+    </h1>
+    <p class="hero-desc">
+      Real-time market intelligence, brand insights, price trends, demand signals and consumer preferences across key fashion categories.
+    </p>
+
+    <!-- 4 Stat Metric Badges in Single Row -->
+    <div class="stats-row">
+      <!-- 01: 11 Categories Covered -->
+      <div class="stat-pill">
+        <div class="stat-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="4"></line>
+            <line x1="12" y1="20" x2="12" y2="10"></line>
+            <line x1="6" y1="20" x2="6" y2="15"></line>
+          </svg>
+        </div>
+        <div class="stat-val-lg">11</div>
+        <div class="stat-meta">
+          <span>CATEGORIES</span>
+          <span>COVERED</span>
+        </div>
+      </div>
+
+      <!-- 02: 500K+ Products Analyzed -->
+      <div class="stat-pill">
+        <div class="stat-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <circle cx="7" cy="7" r="1.5" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <div class="stat-val-lg">500K+</div>
+        <div class="stat-meta">
+          <span>PRODUCTS</span>
+          <span>ANALYZED</span>
+        </div>
+      </div>
+
+      <!-- 03: 250+ Brands Tracked -->
+      <div class="stat-pill">
+        <div class="stat-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <div class="stat-val-lg">250+</div>
+        <div class="stat-meta">
+          <span>BRANDS</span>
+          <span>TRACKED</span>
+        </div>
+      </div>
+
+      <!-- 04: Real-time Market Intelligence -->
+      <div class="stat-pill">
+        <div class="stat-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            <polyline points="17 6 23 6 23 12"></polyline>
+          </svg>
+        </div>
+        <div class="stat-val-txt">REAL-TIME</div>
+        <div class="stat-meta">
+          <span>MARKET</span>
+          <span>INTELLIGENCE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Floating Parchment Checklist Panel -->
+  <aside class="hero-checklist-panel">
+    <div class="panel-header">
       TURN FASHION DATA<br>
       INTO SMARTER DECISIONS.
     </div>
-    <div class="hero-panel-line"></div>
-    <div class="hero-panel-text">
-      Real-time market insights for brands, buyers and fashion businesses.
-    </div>
-  </div>
+    <ul class="checklist-list">
+      <li class="checklist-entry">
+        <span class="entry-check-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="8 12 11 15 16 9"></polyline>
+          </svg>
+        </span>
+        <span>Category Intelligence</span>
+      </li>
+      <li class="checklist-entry">
+        <span class="entry-check-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="8 12 11 15 16 9"></polyline>
+          </svg>
+        </span>
+        <span>Brand Intelligence</span>
+      </li>
+      <li class="checklist-entry">
+        <span class="entry-check-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="8 12 11 15 16 9"></polyline>
+          </svg>
+        </span>
+        <span>Price Intelligence</span>
+      </li>
+      <li class="checklist-entry">
+        <span class="entry-check-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="8 12 11 15 16 9"></polyline>
+          </svg>
+        </span>
+        <span>Demand &amp; Trend Analysis</span>
+      </li>
+      <li class="checklist-entry">
+        <span class="entry-check-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="8 12 11 15 16 9"></polyline>
+          </svg>
+        </span>
+        <span>Consumer &amp; Attribute Insights</span>
+      </li>
+    </ul>
+  </aside>
 </section>
 
-<main id="intelligenceGrid" class="intelligence-grid">
-  <!-- Cards are rendered dynamically from CATEGORIES below -->
+<!-- ==========================================================================
+     CATEGORIES GRID (9 CARDS)
+     ========================================================================== -->
+<main class="categories-section">
+  <div id="intelligenceGrid" class="cards-grid">
+
+    <!-- Card 01: Activewear -->
+    <div class="cat-card" data-slug="activewear" data-port="3008" data-route="/activewear/">
+      <img class="card-media" src="/assets/cat_01_activewear.jpg" alt="Activewear" loading="lazy" style="object-position: center 42%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">01</div>
+      <div class="card-info">
+        <h2 class="card-title">Activewear</h2>
+        <div class="card-subtitle">PERFORMANCE MEETS STYLE</div>
+      </div>
+      <a href="/activewear/" class="card-arrow" aria-label="Open Activewear Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/activewear/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/activewear/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/activewear/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/activewear/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/activewear/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 02: Polo -->
+    <div class="cat-card" data-slug="polos" data-port="3009" data-route="/polos/">
+      <img class="card-media" src="/assets/cat_02_polo.jpg" alt="Polo" loading="lazy" style="object-position: center 40%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">02</div>
+      <div class="card-info">
+        <h2 class="card-title">Polo</h2>
+        <div class="card-subtitle">TIMELESS CASUALS</div>
+      </div>
+      <a href="/polos/" class="card-arrow" aria-label="Open Polo Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/polos/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/polos/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/polos/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/polos/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/polos/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 03: Ethnicwear -->
+    <div class="cat-card" data-slug="ethnic" data-port="3015" data-route="/ethnic/">
+      <img class="card-media" src="/assets/cat_03_ethnicwear.jpg" alt="Ethnicwear" loading="lazy" style="object-position: center 40%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">03</div>
+      <div class="card-info">
+        <h2 class="card-title">Ethnicwear</h2>
+        <div class="card-subtitle">TRADITION IN TRENDS</div>
+      </div>
+      <a href="/ethnic/" class="card-arrow" aria-label="Open Ethnicwear Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/ethnic/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/ethnic/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/ethnic/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/ethnic/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/ethnic/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 04: Westernwear -->
+    <div class="cat-card" data-slug="westernwear" data-port="3012" data-route="/westernwear/">
+      <img class="card-media" src="/assets/cat_04_westernwear.jpg" alt="Westernwear" loading="lazy" style="object-position: center 35%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">04</div>
+      <div class="card-info">
+        <h2 class="card-title">Westernwear</h2>
+        <div class="card-subtitle">MODERN EVERYDAY STYLE</div>
+      </div>
+      <a href="/westernwear/" class="card-arrow" aria-label="Open Westernwear Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/westernwear/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/westernwear/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/westernwear/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/westernwear/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/westernwear/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 05: Shirts -->
+    <div class="cat-card" data-slug="shirts" data-port="3011" data-route="/shirts/">
+      <img class="card-media" src="/assets/cat_05_shirts.jpg" alt="Shirts" loading="lazy" style="object-position: center 36%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">05</div>
+      <div class="card-info">
+        <h2 class="card-title">Shirts</h2>
+        <div class="card-subtitle">ESSENTIALS REIMAGINED</div>
+      </div>
+      <a href="/shirts/" class="card-arrow" aria-label="Open Shirts Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/shirts/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/shirts/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/shirts/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/shirts/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/shirts/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 06: Kidswear -->
+    <div class="cat-card" data-slug="kids" data-port="3010" data-route="/kids/">
+      <img class="card-media" src="/assets/cat_06_kidswear.jpg" alt="Kidswear" loading="lazy" style="object-position: center 42%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">06</div>
+      <div class="card-info">
+        <h2 class="card-title">Kidswear</h2>
+        <div class="card-subtitle">STYLE FOR EVERY STORY</div>
+      </div>
+      <a href="/kids/" class="card-arrow" aria-label="Open Kidswear Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/kids/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/kids/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/kids/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/kids/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/kids/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 07: Occasionwear -->
+    <div class="cat-card" data-slug="occasionwear" data-port="3014" data-route="/occasionwear/">
+      <img class="card-media" src="/assets/cat_07_occasionwear.jpg" alt="Occasionwear" loading="lazy" style="object-position: center 43%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">07</div>
+      <div class="card-info">
+        <h2 class="card-title">Occasionwear</h2>
+        <div class="card-subtitle">MADE FOR MOMENTS</div>
+      </div>
+      <a href="/occasionwear/" class="card-arrow" aria-label="Open Occasionwear Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/occasionwear/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/occasionwear/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/occasionwear/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/occasionwear/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/occasionwear/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 08: Innerwear -->
+    <div class="cat-card" data-slug="innerwear" data-port="3013" data-route="/innerwear/">
+      <img class="card-media" src="/assets/cat_08_innerwear.jpg" alt="Innerwear" loading="lazy" style="object-position: center 38%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">08</div>
+      <div class="card-info">
+        <h2 class="card-title">Innerwear</h2>
+        <div class="card-subtitle">COMFORT CONFIDENCE</div>
+      </div>
+      <a href="/innerwear/" class="card-arrow" aria-label="Open Innerwear Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/innerwear/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/innerwear/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/innerwear/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/innerwear/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/innerwear/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 09: Special Collections (Distinct Light Aesthetic) -->
+    <div class="cat-card card-style-light" data-slug="special" data-port="3019" data-route="/special/">
+      <img class="card-media" src="/assets/cat_09_special.jpg" alt="Special Collections" loading="lazy" style="object-position: center 42%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">09</div>
+      <div class="card-info">
+        <h2 class="card-title">Special Collections</h2>
+        <div class="card-subtitle">EXCLUSIVE INSIGHTS</div>
+      </div>
+      <a href="/special/" class="card-arrow" aria-label="Open Special Collections" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/special/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/special/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/special/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/special/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/special/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 10: Zero Lag -->
+    <div class="cat-card" data-slug="maneet" data-port="3020" data-route="/maneet/">
+      <img class="card-media" src="/assets/cat_10_zerolag.jpg" onerror="this.src='https://pearlwebsitecdn-prod-d8bgbfaqbgcghcfw.a01.azurefd.net/drupal-files/inline-images/Genz%20Fashion%20Trends%20Top%20Looks%20That%20Will%20Dominate_0.jpg'" alt="Zero Lag" loading="lazy" style="object-position: center 38%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">10</div>
+      <div class="card-info">
+        <h2 class="card-title">Zero Lag</h2>
+        <div class="card-subtitle">SHIRTS INTELLIGENCE</div>
+      </div>
+      <a href="/maneet/" class="card-arrow" aria-label="Open Zero Lag Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/maneet/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/maneet/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/maneet/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/maneet/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/maneet/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+    <!-- Card 11: Aspiring GenZ brands -->
+    <div class="cat-card" data-slug="newgenz" data-port="3021" data-route="/newgenz/">
+      <img class="card-media" src="/assets/cat_11_genz.jpg" onerror="this.src='https://a.storyblok.com/f/165154/1024x768/0e7fabefa0/tmphobgkyxt-featured-1758877779621-5ec8ej.jpg'" alt="Aspiring GenZ" loading="lazy" style="object-position: center 38%;">
+      <div class="card-overlay"></div>
+      <div class="card-num-badge">11</div>
+      <div class="card-info">
+        <h2 class="card-title">Aspiring GenZ</h2>
+        <div class="card-subtitle">GENZ SHIRTS INTELLIGENCE</div>
+      </div>
+      <a href="/newgenz/" class="card-arrow" aria-label="Open Aspiring GenZ Intelligence" data-cat-link>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div class="card-footer-bar">
+        <a href="/newgenz/#overview" class="footer-nav-link" data-sublink="overview">Trends</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/newgenz/#brands" class="footer-nav-link" data-sublink="brands">Brands</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/newgenz/#price-intel" class="footer-nav-link" data-sublink="price-intel">Price Intel</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/newgenz/#demand-radar" class="footer-nav-link" data-sublink="demand-radar">Demand</a>
+        <span class="footer-bar-sep">|</span>
+        <a href="/newgenz/#category-intel" class="footer-nav-link" data-sublink="category-intel">Attributes</a>
+      </div>
+    </div>
+
+  </div>
 </main>
 
-<footer class="footer">
-  <div class="footer-brand">LAL10 · FASHION INTELLIGENCE</div>
-  <div class="footer-right">© <span id="year"></span> LAL10. All rights reserved.</div>
+<!-- ==========================================================================
+     FOOTER
+     ========================================================================== -->
+<footer class="site-footer">
+  <div class="footer-left">FASHION INTELLIGENCE HUB</div>
+  <div class="footer-right">© <span id="year"></span> FashionOS · All Rights Reserved</div>
 </footer>
 
+<!-- ==========================================================================
+     SCRIPTS & DYNAMIC INTERACTION
+     ========================================================================== -->
 <script>
-/*
-|--------------------------------------------------------------------------
-| CATEGORY CONFIG
-|--------------------------------------------------------------------------
-| Add / remove categories here.
-| Every card in the homepage is generated from this array.
-|
-| route      = destination URL
-| image      = card image
-| title      = visible card title
-| subtitle   = visible card subtitle
-| objectPos  = image crop position
-|--------------------------------------------------------------------------
-*/
-
-const CATEGORIES = [
-  {
-    slug: "activewear",
-    port: 3008,
-    title: "Activewear",
-    subtitle: "Trend Intelligence",
-    route: "/activewear/",
-    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 42%"
-  },
-  {
-    slug: "polo",
-    port: 3009,
-    title: "Polo",
-    subtitle: "Trend Intelligence",
-    route: "/polos/",
-    image: "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 40%"
-  },
-  {
-    slug: "ethnicwear",
-    port: 3015,
-    title: "Ethnicwear",
-    subtitle: "Trend Intelligence",
-    route: "/ethnic/",
-    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 40%"
-  },
-  {
-    slug: "westernwear",
-    port: 3012,
-    title: "Westernwear",
-    subtitle: "Trend Intelligence",
-    route: "/westernwear/",
-    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 35%"
-  },
-  {
-    slug: "shirts",
-    port: 3011,
-    title: "Shirts",
-    subtitle: "Trend Intelligence",
-    route: "/shirts/",
-    image: "https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 36%"
-  },
-  {
-    slug: "kidswear",
-    port: 3010,
-    title: "Kidswear",
-    subtitle: "Trend Intelligence",
-    route: "/kids/",
-    image: "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 42%"
-  },
-  {
-    slug: "occasionwear",
-    port: 3014,
-    title: "Occasionwear",
-    subtitle: "Trend Intelligence",
-    route: "/occasionwear/",
-    image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 43%"
-  },
-  {
-    slug: "innerwear",
-    port: 3013,
-    title: "Innerwear",
-    subtitle: "Trend Intelligence",
-    route: "/innerwear/",
-    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 38%"
-  },
-  {
-    slug: "special",
-    port: 3019,
-    title: "Special Arrow X USpolo",
-    subtitle: "Trend Intelligence",
-    route: "/special/",
-    image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 42%"
-  },
-  {
-    slug: "maneet",
-    port: 3020,
-    title: "Maneet",
-    subtitle: "Shirts Intelligence",
-    route: "/maneet/",
-    image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=600&q=75",
-    objectPos: "center 38%"
-  }
-];
-
-/*
-|--------------------------------------------------------------------------
-| RENDER CARDS
-|--------------------------------------------------------------------------
-*/
-
-const grid = document.getElementById("intelligenceGrid");
+document.getElementById("year").textContent = new Date().getFullYear();
 
 function getSessionToken() {
   const match = document.cookie.match(/(?:^|;\s*)session_token=([^;]+)/);
@@ -639,167 +1121,51 @@ function getSessionToken() {
   try { return localStorage.getItem("session_token") || ""; } catch(e) { return ""; }
 }
 
-function resolveCardUrl(category) {
+function resolveTargetUrl(port, route, subhash) {
   const isLocal = window.location.port === "3000" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-  if (isLocal && category.port) {
-    const token = getSessionToken();
-    const tokenQuery = token ? `?auth_token=${encodeURIComponent(token)}` : "";
-    return `http://${window.location.hostname}:${category.port}/${tokenQuery}`;
+  const token = getSessionToken();
+  const tokenQuery = token ? `?auth_token=${encodeURIComponent(token)}` : "";
+  const hashPart = subhash ? `#${subhash.replace(/^#/, "")}` : "";
+
+  if (isLocal && port) {
+    return `http://${window.location.hostname}:${port}/${tokenQuery}${hashPart}`;
   }
-  return category.route || `/${category.slug}/`;
+  const base = route || "/";
+  return `${base}${tokenQuery}${hashPart}`;
 }
 
-function renderCategories(categories) {
-  grid.innerHTML = "";
+// Wire up card clicks and link routing
+function wireCardInteractions() {
+  const cards = document.querySelectorAll(".cat-card");
 
-  categories.forEach(category => {
-    const card = document.createElement("a");
+  cards.forEach(card => {
+    const port = card.dataset.port;
+    const route = card.dataset.route;
 
-    card.className = "intelligence-card";
-    card.href = resolveCardUrl(category);
-    card.dataset.slug = category.slug;
-    card.setAttribute("aria-label", `Open ${category.title} intelligence`);
+    // Update main card link
+    const arrowBtn = card.querySelector("[data-cat-link]");
+    if (arrowBtn) {
+      arrowBtn.href = resolveTargetUrl(port, route, "");
+    }
 
-    card.innerHTML = `
-      <img
-        class="card-image"
-        src="${category.image}"
-        alt="${category.title}"
-        loading="lazy"
-        decoding="async"
-        style="object-position:${category.objectPos || "center"}"
-      >
+    // Card body click (if clicking outside footer or links)
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".card-footer-bar") || e.target.closest(".card-arrow")) {
+        return;
+      }
+      window.location.href = resolveTargetUrl(port, route, "");
+    });
 
-      <div class="card-status">
-        <span class="status-dot" id="dot-${category.slug}"></span>
-        <span id="status-${category.slug}">Live</span>
-      </div>
-
-      <div class="card-content">
-        <div>
-          <div class="card-title">${category.title}</div>
-          <div class="card-subtitle">${category.subtitle}</div>
-        </div>
-
-        <div class="card-arrow" aria-hidden="true">→</div>
-      </div>
-    `;
-
-    grid.appendChild(card);
+    // Update footer sublinks
+    const sublinks = card.querySelectorAll("[data-sublink]");
+    sublinks.forEach(link => {
+      const sub = link.dataset.sublink;
+      link.href = resolveTargetUrl(port, route, sub);
+    });
   });
 }
 
-renderCategories(CATEGORIES);
-
-/*
-|--------------------------------------------------------------------------
-| SERVICE STATUS RESOLVER (Live Health & Dots)
-|--------------------------------------------------------------------------
-*/
-
-const SLUG_ALIASES = {
-  "polo": "polos",
-  "polos": "polo",
-  "kidswear": "kids",
-  "kids": "kidswear",
-  "ethnicwear": "ethnic",
-  "ethnic": "ethnicwear",
-  "loungewear": "special",
-  "special": "loungewear"
-};
-
-async function loadServiceStatus() {
-  try {
-    const response = await fetch("/api/services", {
-      credentials: "include",
-      cache: "no-store"
-    });
-
-    if (!response.ok) return;
-
-    const data = await response.json();
-    const services = data.services || [];
-
-    services.forEach(service => {
-      if (!service.slug) return;
-
-      const targetSlugs = [service.slug, SLUG_ALIASES[service.slug]].filter(Boolean);
-
-      targetSlugs.forEach(slug => {
-        const dot = document.getElementById(`dot-${slug}`);
-        const label = document.getElementById(`status-${slug}`);
-
-        if (dot && label) {
-          dot.classList.remove("online", "offline");
-
-          if (service.online) {
-            dot.classList.add("online");
-            label.textContent = "Live";
-          } else {
-            dot.classList.add("offline");
-            label.textContent = "Offline";
-          }
-        }
-
-        const card = document.querySelector(
-          `.intelligence-card[data-slug="${slug}"]`
-        );
-
-        if (card) {
-          const badge = card.querySelector(".card-status");
-          if (badge) badge.style.display = "flex";
-        }
-      });
-    });
-
-  } catch (error) {
-    // Endpoint is optional. Keep homepage clean if unreachable.
-  }
-}
-
-/*
-|--------------------------------------------------------------------------
-| DYNAMIC CATEGORY API
-|--------------------------------------------------------------------------
-*/
-
-async function loadCategoriesFromAPI() {
-  try {
-    const response = await fetch("/api/intelligence/categories", {
-      credentials: "include",
-      cache: "no-store"
-    });
-
-    if (!response.ok) return;
-
-    const data = await response.json();
-
-    if (
-      Array.isArray(data.categories) &&
-      data.categories.length
-    ) {
-      renderCategories(data.categories);
-      loadServiceStatus();
-    }
-  } catch (error) {
-    // Local CATEGORIES remains the solid fallback.
-  }
-}
-
-/*
-|--------------------------------------------------------------------------
-| INIT
-|--------------------------------------------------------------------------
-*/
-
-document.getElementById("year").textContent =
-  new Date().getFullYear();
-
-loadCategoriesFromAPI();
-loadServiceStatus();
-
-/* Refresh service status every 30 seconds */
-setInterval(loadServiceStatus, 30000);
+wireCardInteractions();
 </script>
 
 </body>

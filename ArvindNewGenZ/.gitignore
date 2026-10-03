@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+.venv/
+.pytest_cache/
+.mypy_cache/
+logs/
+tmp/
+data/*.duckdb
+data/*.duckdb.wal
+*.db
+cookie.txt
